@@ -42,11 +42,9 @@ var dateTimeVenue = "$date | $time\n$venue"
 var teamName = "India"
 var matchBw = ""
 var teamData: HashMap<String, TeamData>? = null
+var viewModel = MainViewModel()
 
 class MatchDetails : ComponentActivity() {
-
-    private val viewModel by viewModels<MainViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,7 +54,7 @@ class MatchDetails : ComponentActivity() {
                     modifier = Modifier.fillMaxWidth(),
                     color = colorResource(R.color.purple_200)
                 ) {
-                    Ui(viewModel)
+                    Ui()
                 }
             }
         }
@@ -64,13 +62,8 @@ class MatchDetails : ComponentActivity() {
 }
 
 @Composable
-fun Ui(viewModel: MainViewModel) {
+fun Ui() {
     val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        viewModel.getMatchData()
-    }
-
     val apiData = viewModel.matchData.observeAsState().value
 
     date = apiData?.matchdetail?.match?.date.toString()
@@ -130,7 +123,6 @@ fun Ui(viewModel: MainViewModel) {
             "Match Details",
             FontWeight.Bold,
         ) { val intent = Intent(context, PlayersDetails::class.java)
-//            val teamListData = teamData?.values?.let { ArrayList(it) }
             intent.putExtra("list", teamData )
             context.startActivity(intent) }
     }

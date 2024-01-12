@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel() : ViewModel() {
+class MainViewModel : ViewModel() {
 
     private val _matchData = MutableLiveData<MatchDetailsModel>()
     val matchData: LiveData<MatchDetailsModel> get() = _matchData
@@ -23,6 +23,9 @@ class MainViewModel() : ViewModel() {
     var errorMessage: String = ""
         private set
 
+    init {
+        getMatchData()
+    }
     fun getMatchData() {
 
         _isLoading.value = true
