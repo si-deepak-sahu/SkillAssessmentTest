@@ -51,7 +51,7 @@ var toolbarTitle = "Players"
 var playerName = "M.S Dhoni"
 var captain = "Captain 🎖️"
 var wicketKeeper = "Wicket Keeper 🧤"
-lateinit var list : HashMap<String, TeamData>
+lateinit var list: HashMap<String, TeamData>
 var teamListData: ArrayList<PlayerInfoData>? = null
 
 class PlayersDetails : ComponentActivity() {
@@ -67,7 +67,7 @@ class PlayersDetails : ComponentActivity() {
                 val title = list[key]?.nameFull.toString().trim()
                 if (title.trim() == "India") {
                     toolbarTitle = "$title Players"
-                    teamListData = list[key]?.players?.values?.let { ArrayList(it)}
+                    teamListData = list[key]?.players?.values?.let { ArrayList(it) }
                     break
                 }
             }
@@ -90,9 +90,11 @@ class PlayersDetails : ComponentActivity() {
 @Composable
 fun PlayerUi(list: ArrayList<PlayerInfoData>?) {
     Column {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .background(colorResource(id = R.color.light_blue))) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorResource(id = R.color.light_blue))
+        ) {
             TextComposable(
                 1,
                 toolbarTitle,
@@ -212,27 +214,10 @@ private fun CardItem(player: PlayerInfoData) {
                             FontWeight.Normal,
                             Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
                         )
-                    }else if (player.iskeeper) {
+                    } else {
                         TextComposable(
                             1,
-                            wicketKeeper,
-                            colorResource(R.color.gray),
-                            14.sp,
-                            FontWeight.Normal,
-                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                        )
-                    }else if (player.iskeeper && player.iscaptain) {
-                        TextComposable(
-                            1,
-                            "$captain | ",
-                            colorResource(R.color.gray),
-                            14.sp,
-                            FontWeight.Normal,
-                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                        )
-                        TextComposable(
-                            1,
-                            wicketKeeper,
+                            "",
                             colorResource(R.color.gray),
                             14.sp,
                             FontWeight.Normal,
@@ -241,11 +226,50 @@ private fun CardItem(player: PlayerInfoData) {
                     }
 
 
+                    if (player.iskeeper) {
+                        TextComposable(
+                            1,
+                            wicketKeeper,
+                            colorResource(R.color.gray),
+                            14.sp,
+                            FontWeight.Normal,
+                            Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
+                        )
+                    } else {
+                        TextComposable(
+                            1,
+                            "",
+                            colorResource(R.color.gray),
+                            14.sp,
+                            FontWeight.Normal,
+                            Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
+                        )
+                    }
+                }
+
+                if (player.iskeeper && player.iscaptain) {
+                    TextComposable(
+                        1,
+                        "$captain | ",
+                        colorResource(R.color.gray),
+                        14.sp,
+                        FontWeight.Normal,
+                        Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                    )
+                    TextComposable(
+                        1,
+                        wicketKeeper,
+                        colorResource(R.color.gray),
+                        14.sp,
+                        FontWeight.Normal,
+                        Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                    )
                 }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
