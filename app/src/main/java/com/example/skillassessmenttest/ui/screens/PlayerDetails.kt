@@ -81,7 +81,7 @@ fun listModificaiton(s: String) {
         for (i in list) {
             val key = i.key
             val title = list[key]?.nameFull.toString().trim()
-            if (title.trim() == "India") {
+            if (title.trim() == s) {
                 toolbarTitle = "$title Players"
                 teamListData = list[key]?.players?.values?.let { ArrayList(it) }
                 break
@@ -122,17 +122,17 @@ fun PlayerUi(list: ArrayList<PlayerInfoData>?) {
                     .padding(10.dp)
                     .align(Alignment.BottomCenter)
             ) {
-                FilterButtons(true)
+                FilterButtons()
             }
         }
     }
 }
 
 @Composable
-fun FilterButtons(filterCheck: Boolean) {
-    var fillter by remember { mutableStateOf(filterCheck) }
+fun FilterButtons() {
+    var fillter by remember { mutableStateOf(true) }
 
-    if (filterCheck) {
+    if (fillter) {
         FilledButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
             Modifier
@@ -140,9 +140,9 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "India",
             FontWeight.Bold,
-        ) { fillter = true
-            listModificaiton("India"
-            )
+        ) {
+            fillter = true
+            listModificaiton("India")
         }
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
@@ -151,7 +151,8 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "New Zealand",
             FontWeight.Bold,
-        ) { fillter = false
+        ) {
+            fillter = false
             listModificaiton("New Zealand")
         }
     } else {
@@ -162,7 +163,8 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "India",
             FontWeight.Bold,
-        ) { fillter = true
+        ) {
+            fillter = true
             listModificaiton("India")
         }
         FilledButtonComposable(
@@ -172,7 +174,8 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "New Zealand",
             FontWeight.Bold,
-        ) { fillter = false
+        ) {
+            fillter = false
             listModificaiton("New Zealand")
         }
     }
