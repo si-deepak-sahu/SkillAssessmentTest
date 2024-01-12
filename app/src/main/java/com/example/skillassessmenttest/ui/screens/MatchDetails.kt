@@ -91,7 +91,7 @@ fun Ui(viewModel: MainViewModel) {
 
     ImageComposable(
         painterResource(id = R.drawable.team),
-        "Image only",
+        "Team Image",
         ContentScale.Crop,
         Modifier
             .fillMaxWidth()
@@ -128,13 +128,5 @@ fun Ui(viewModel: MainViewModel) {
             "Match Details",
             FontWeight.Bold,
         ) { context.startActivity(Intent(context, PlayersDetails::class.java)) }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SkillAssessmentTestTheme {
-//        Ui(viewModel)
     }
 }
