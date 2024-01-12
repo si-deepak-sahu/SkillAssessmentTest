@@ -34,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,18 +67,19 @@ class PlayersDetails : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun PlayerUi() {
     Column {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().background(colorResource(id = R.color.light_blue))) {
             TextComposable(
                 1,
                 "Indian players",
-                colorResource(R.color.black),
+                colorResource(R.color.off_white),
                 22.sp,
                 FontWeight.Bold,
                 Modifier
-                    .padding(10.dp, 10.dp)
+                    .padding(10.dp, 15.dp)
                     .align(Alignment.TopCenter)
             )
         }
@@ -111,7 +111,7 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "India",
             FontWeight.Bold,
-        ) { fillter = true}
+        ) { fillter = true }
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
             Modifier
@@ -119,8 +119,8 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "New Zealand",
             FontWeight.Bold,
-        ) { fillter = false}
-    }else{
+        ) { fillter = false }
+    } else {
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
             Modifier
@@ -128,7 +128,7 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "India",
             FontWeight.Bold,
-        ) { fillter = true}
+        ) { fillter = true }
         FilledButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
             Modifier
@@ -136,7 +136,7 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "New Zealand",
             FontWeight.Bold,
-        ) { fillter = false}
+        ) { fillter = false }
     }
 }
 
