@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.skillassessmenttest.model.MatchDetailsModel
 import com.example.skillassessmenttest.networking.ApiConfig
+import com.example.skillassessmenttest.ui.model.TeamData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,6 +14,9 @@ class MainViewModel : ViewModel() {
 
     private val _matchData = MutableLiveData<MatchDetailsModel>()
     val matchData: LiveData<MatchDetailsModel> get() = _matchData
+
+    private val _teamData = MutableLiveData<TeamData>()
+    val teamData: LiveData<TeamData> get() = _teamData
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading

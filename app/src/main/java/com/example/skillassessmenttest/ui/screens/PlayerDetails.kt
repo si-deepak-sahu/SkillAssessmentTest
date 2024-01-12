@@ -48,7 +48,6 @@ import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 
 
 var toolbarTitle = "Players"
-var playerName = "M.S Dhoni"
 var captain = "Captain 🎖️"
 var wicketKeeper = "Wicket Keeper 🧤"
 lateinit var list: HashMap<String, TeamData>
