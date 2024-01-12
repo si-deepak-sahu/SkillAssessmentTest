@@ -87,9 +87,7 @@ fun Ui(viewModel: MainViewModel) {
         }
     }
 
-    if (strBuilder.isNotEmpty()) {
-        matchBw = strBuilder.substring(0, strBuilder.length - 4)
-    }
+    if (strBuilder.isNotEmpty()) matchBw = strBuilder.substring(0, strBuilder.length - 4)
 
     ImageComposable(
         painterResource(id = R.drawable.team),
