@@ -3,6 +3,8 @@ package com.example.skillassessmenttest.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import okhttp3.Interceptor.Companion.invoke
 
 @Composable
 fun TextComposable(maxLines: Int, text: String, color: Color, textSize: TextUnit, fontStyle: FontWeight, modifier: Modifier) {
@@ -31,6 +34,18 @@ fun TextComposable(maxLines: Int, text: String, color: Color, textSize: TextUnit
 @Composable
 fun FilledButtonComposable(buttonColor: ButtonColors, modifier: Modifier, btnText: String, fontStyle: FontWeight, clickAction: () -> Unit) {
     Button(
+        onClick = clickAction::invoke,
+        colors = buttonColor,
+        modifier = modifier
+    ) {
+        Text(btnText,
+            fontWeight = fontStyle )
+    }
+}
+
+@Composable
+fun OutlinedButtonComposable(buttonColor: ButtonColors, modifier: Modifier, btnText: String, fontStyle: FontWeight, clickAction: () -> Unit) {
+    OutlinedButton(
         onClick = clickAction::invoke,
         colors = buttonColor,
         modifier = modifier
