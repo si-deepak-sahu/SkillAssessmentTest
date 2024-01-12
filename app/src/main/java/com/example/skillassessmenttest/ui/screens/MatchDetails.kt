@@ -123,7 +123,7 @@ fun Ui(viewModel: MainViewModel) {
             Modifier.padding(10.dp, 10.dp)
         )
         FilledButtonComposable(
-            ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+            ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
             Modifier.padding(10.dp),
             "Match Details",
             FontWeight.Bold,
