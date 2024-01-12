@@ -61,17 +61,7 @@ class PlayersDetails : ComponentActivity() {
 
         list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
 
-        if (list != null) {
-            for (i in list) {
-                val key = i.key
-                val title = list[key]?.nameFull.toString().trim()
-                if (title.trim() == "India") {
-                    toolbarTitle = "$title Players"
-                    teamListData = list[key]?.players?.values?.let { ArrayList(it) }
-                    break
-                }
-            }
-        }
+        listModificaiton("India")
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
@@ -81,6 +71,20 @@ class PlayersDetails : ComponentActivity() {
                 ) {
                     PlayerUi(teamListData)
                 }
+            }
+        }
+    }
+}
+
+fun listModificaiton(s: String) {
+    if (list != null) {
+        for (i in list) {
+            val key = i.key
+            val title = list[key]?.nameFull.toString().trim()
+            if (title.trim() == "India") {
+                toolbarTitle = "$title Players"
+                teamListData = list[key]?.players?.values?.let { ArrayList(it) }
+                break
             }
         }
     }
@@ -136,7 +140,10 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "India",
             FontWeight.Bold,
-        ) { fillter = true }
+        ) { fillter = true
+            listModificaiton("India"
+            )
+        }
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
             Modifier
@@ -144,7 +151,9 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "New Zealand",
             FontWeight.Bold,
-        ) { fillter = false }
+        ) { fillter = false
+            listModificaiton("New Zealand")
+        }
     } else {
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
@@ -153,7 +162,9 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "India",
             FontWeight.Bold,
-        ) { fillter = true }
+        ) { fillter = true
+            listModificaiton("India")
+        }
         FilledButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
             Modifier
@@ -161,7 +172,9 @@ fun FilterButtons(filterCheck: Boolean) {
                 .width(130.dp),
             "New Zealand",
             FontWeight.Bold,
-        ) { fillter = false }
+        ) { fillter = false
+            listModificaiton("New Zealand")
+        }
     }
 }
 
