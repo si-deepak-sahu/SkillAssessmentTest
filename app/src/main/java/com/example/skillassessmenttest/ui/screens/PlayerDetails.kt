@@ -42,17 +42,36 @@ import com.example.skillassessmenttest.ui.component.FilledButtonComposable
 import com.example.skillassessmenttest.ui.component.ImageComposable
 import com.example.skillassessmenttest.ui.component.OutlinedButtonComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
+import com.example.skillassessmenttest.ui.model.PlayerInfoData
+import com.example.skillassessmenttest.ui.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 
 
+var toolbarTitle = "Players"
 var playerName = "M.S Dhoni"
-var captain = "Captain | "
+var captain = "Captain"
 var wicketKeeper = "Wicket Keeper"
-val listA = listOf("Example", "Android", "Tutorial", "Jetpack", "Compose", "List", "Example", "Simple", "List", "Example", "Simple", "List", "Example", "Simple", "List", "Example", "Simple", "List")
+lateinit var list : HashMap<String, TeamData>
+var teamListData: ArrayList<PlayerInfoData>? = null
 
 class PlayersDetails : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
+
+        if (list != null) {
+            for (i in list) {
+                val key = i.key
+                val title = list[key]?.nameFull.toString().trim()
+                if (title.trim() == "India") {
+                    toolbarTitle = "$title Players"
+                    teamListData = list[key]?.players?.values?.let { ArrayList(it)}
+                    break
+                }
+            }
+        }
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
@@ -60,7 +79,7 @@ class PlayersDetails : ComponentActivity() {
                     modifier = Modifier.fillMaxWidth(),
                     color = colorResource(R.color.off_white)
                 ) {
-                    PlayerUi()
+                    PlayerUi(teamListData)
                 }
             }
         }
@@ -69,12 +88,14 @@ class PlayersDetails : ComponentActivity() {
 
 
 @Composable
-fun PlayerUi() {
+fun PlayerUi(list: ArrayList<PlayerInfoData>?) {
     Column {
-        Box(modifier = Modifier.fillMaxWidth().background(colorResource(id = R.color.light_blue))) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .background(colorResource(id = R.color.light_blue))) {
             TextComposable(
                 1,
-                "Indian players",
+                toolbarTitle,
                 colorResource(R.color.off_white),
                 22.sp,
                 FontWeight.Bold,
@@ -85,7 +106,9 @@ fun PlayerUi() {
         }
         Box {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(listA) { CardItem() }
+                items(list!!) { player ->
+                    CardItem(player)
+                }
             }
             Row(
                 Modifier
@@ -141,7 +164,7 @@ fun FilterButtons(filterCheck: Boolean) {
 }
 
 @Composable
-private fun CardItem() {
+private fun CardItem(player: PlayerInfoData) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -173,29 +196,51 @@ private fun CardItem() {
             ) {
                 TextComposable(
                     1,
-                    playerName.uppercase(),
+                    player.nameFull.uppercase(),
                     colorResource(R.color.black),
                     20.sp,
                     FontWeight.Bold,
                     Modifier.padding(10.dp, 0.dp)
                 )
                 Row {
-                    TextComposable(
-                        1,
-                        captain,
-                        colorResource(R.color.gray),
-                        14.sp,
-                        FontWeight.Normal,
-                        Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                    )
-                    TextComposable(
-                        1,
-                        wicketKeeper,
-                        colorResource(R.color.gray),
-                        14.sp,
-                        FontWeight.Normal,
-                        Modifier.padding(0.dp, 0.dp)
-                    )
+                    if (player.iscaptain) {
+                        TextComposable(
+                            1,
+                            captain,
+                            colorResource(R.color.gray),
+                            14.sp,
+                            FontWeight.Normal,
+                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                        )
+                    }else if (player.iskeeper) {
+                        TextComposable(
+                            1,
+                            wicketKeeper,
+                            colorResource(R.color.gray),
+                            14.sp,
+                            FontWeight.Normal,
+                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                        )
+                    }else if (player.iskeeper && player.iscaptain) {
+                        TextComposable(
+                            1,
+                            "$captain | ",
+                            colorResource(R.color.gray),
+                            14.sp,
+                            FontWeight.Normal,
+                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                        )
+                        TextComposable(
+                            1,
+                            wicketKeeper,
+                            colorResource(R.color.gray),
+                            14.sp,
+                            FontWeight.Normal,
+                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                        )
+                    }
+
+
                 }
             }
         }
@@ -206,6 +251,6 @@ private fun CardItem() {
 @Composable
 fun GreetingPreview() {
     SkillAssessmentTestTheme {
-        PlayerUi()
+        PlayerUi(teamListData)
     }
 }

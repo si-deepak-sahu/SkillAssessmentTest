@@ -2,6 +2,7 @@ package com.example.skillassessmenttest.ui.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class TeamData(
     @SerializedName("Name_Full")
@@ -10,4 +11,4 @@ data class TeamData(
     val nameShort: String,
     @SerializedName("Players")
     val players: HashMap<String, PlayerInfoData>
-)
+):Serializable

@@ -2,6 +2,7 @@ package com.example.skillassessmenttest.ui.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Batting(
     @SerializedName("Average")
@@ -12,4 +13,4 @@ data class Batting(
     val strikerate: String,
     @SerializedName("Style")
     val style: String
-)
+): Serializable

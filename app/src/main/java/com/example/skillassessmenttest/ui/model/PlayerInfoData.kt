@@ -2,6 +2,7 @@ package com.example.skillassessmenttest.ui.model
 
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class PlayerInfoData(
     @SerializedName("Batting")
@@ -16,4 +17,4 @@ data class PlayerInfoData(
     val nameFull: String,
     @SerializedName("Position")
     val position: String
-)
+): Serializable

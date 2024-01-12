@@ -29,6 +29,7 @@ import com.example.skillassessmenttest.R
 import com.example.skillassessmenttest.ui.component.FilledButtonComposable
 import com.example.skillassessmenttest.ui.component.ImageComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
+import com.example.skillassessmenttest.ui.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 import com.example.skillassessmenttest.viewModel.MainViewModel
 
@@ -40,6 +41,7 @@ var dateTimeVenue = "$date | $time\n$venue"
 
 var teamName = "India"
 var matchBw = ""
+var teamData: HashMap<String, TeamData>? = null
 
 class MatchDetails : ComponentActivity() {
 
@@ -76,13 +78,13 @@ fun Ui(viewModel: MainViewModel) {
     venue = apiData?.matchdetail?.venue?.name.toString()
     dateTimeVenue = "$date | $time\n$venue"
 
-    val teamData = apiData?.teams
+    teamData = apiData?.teams
 
     val strBuilder = StringBuilder()
     if (teamData != null) {
-        for (i in teamData) {
+        for (i in teamData!!) {
             val key = i.key
-            teamName = teamData[key]?.nameFull.toString()
+            teamName = teamData!![key]?.nameFull.toString()
             strBuilder.appendLine(teamName).append("vs\n")
         }
     }
@@ -127,6 +129,9 @@ fun Ui(viewModel: MainViewModel) {
             Modifier.padding(10.dp),
             "Match Details",
             FontWeight.Bold,
-        ) { context.startActivity(Intent(context, PlayersDetails::class.java)) }
+        ) { val intent = Intent(context, PlayersDetails::class.java)
+//            val teamListData = teamData?.values?.let { ArrayList(it) }
+            intent.putExtra("list", teamData )
+            context.startActivity(intent) }
     }
 }
