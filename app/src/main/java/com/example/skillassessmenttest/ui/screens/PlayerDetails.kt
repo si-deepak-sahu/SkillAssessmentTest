@@ -1,5 +1,6 @@
 package com.example.skillassessmenttest.ui.screens
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -65,7 +67,8 @@ class PlayersDetails : ComponentActivity() {
                 ) {
                     list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
                     listModification("India")
-                    PlayerDetailsScreenUi(teamListData)
+//                    PlayerDetailsScreenUi(teamListData)
+                    PopUpCardItem()
                 }
             }
         }
@@ -241,8 +244,57 @@ private fun CaptainOrKeeperText(text: String, modifier: Modifier) {
     )
 }
 
+@Composable
+private fun PopUpCardItem() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.purple_200))
+    ) {
+        ElevatedCard(
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 6.dp
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(R.color.lavendar),
+            ),
+            shape = RoundedCornerShape(15.dp),
+            modifier = Modifier
+                .padding(40.dp, 20.dp, 40.dp, 50.dp) //margin
+                .fillMaxWidth()
+                .height(450.dp)
+                .padding(10.dp, 5.dp) //padding
+                .align(Alignment.Center)
+        ) {
+            Column {
+                ImageComposable(
+                    painterResource(id = R.drawable.player),
+                    "Player Image",
+                    ContentScale.Inside,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
+                        .size(220.dp)
+                        .clip(RoundedCornerShape(5))
+                        .background(colorResource(R.color.light_yellow))
+                )
+                Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    FilledButtonComposable(
+                        ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                        Modifier.padding(0.dp),
+                        "Batting",
+                        FontWeight.Bold,
+                    ) {}
+                    
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun UiPreview() {
-    PlayerDetailsScreenUi(teamListData)
+//    PlayerDetailsScreenUi(teamListData)
+    PopUpCardItem()
 }
