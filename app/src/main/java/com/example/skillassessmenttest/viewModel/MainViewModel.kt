@@ -28,9 +28,9 @@ class MainViewModel : ViewModel() {
         private set
 
     init {
-        getMatchData()
+        fetchMatchData()
     }
-    fun getMatchData() {
+    private fun fetchMatchData() {
 
         _isLoading.value = true
         _isError.value = false
