@@ -1,6 +1,5 @@
 package com.example.skillassessmenttest.ui.screens
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,10 +18,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -67,8 +73,8 @@ class PlayersDetails : ComponentActivity() {
                 ) {
                     list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
                     listModification("India")
-//                    PlayerDetailsScreenUi(teamListData)
-                    PopUpCardItem()
+                    PlayerDetailsScreenUi(teamListData)
+                    PopUpUi(true)
                 }
             }
         }
@@ -92,6 +98,8 @@ fun listModification(s: String) {
 
 @Composable
 fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
+    var popUpVisible by remember { mutableStateOf(false) }
+
     Column {
         Box(
             modifier = Modifier
@@ -112,7 +120,9 @@ fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
         Box {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 if (!list.isNullOrEmpty()) items(list) { player ->
-                    CardItem(player)
+                    CardItem(player) {
+                        popUpVisible = true
+                    }
                 }
             }
             Row(
@@ -132,20 +142,20 @@ fun FilterButtons() {
     var filter by remember { mutableStateOf(true) }
 
     if (filter) {
-        FilledButton("India"){
+        FilledButton("India") {
             filter = true
             listModification("India")
         }
-        OutlinedButton("New Zealand"){
+        OutlinedButton("New Zealand") {
             filter = false
             listModification("New Zealand")
         }
     } else {
-        OutlinedButton("India"){
+        OutlinedButton("India") {
             filter = true
             listModification("India")
         }
-        FilledButton("New Zealand"){
+        FilledButton("New Zealand") {
             filter = false
             listModification("New Zealand")
         }
@@ -167,7 +177,7 @@ private fun OutlinedButton(teamName: String, clickAction: () -> Unit) {
 }
 
 @Composable
-private fun FilledButton(teamName: String, clickAction: () -> Unit){
+private fun FilledButton(teamName: String, clickAction: () -> Unit) {
     FilledButtonComposable(
         ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
         Modifier
@@ -180,8 +190,9 @@ private fun FilledButton(teamName: String, clickAction: () -> Unit){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CardItem(player: PlayerInfoData) {
+private fun CardItem(player: PlayerInfoData, onClickStartSource: () -> Unit) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -193,7 +204,8 @@ private fun CardItem(player: PlayerInfoData) {
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
-            .padding(10.dp, 5.dp)
+            .padding(10.dp, 5.dp),
+        onClick = { onClickStartSource.invoke() },
     ) {
         Row {
             ImageComposable(
@@ -211,21 +223,14 @@ private fun CardItem(player: PlayerInfoData) {
                     .fillMaxHeight()
                     .padding(0.dp, 40.dp)
             ) {
-                TextComposable(
-                    1,
-                    player.nameFull.uppercase(),
-                    colorResource(R.color.black),
-                    20.sp,
-                    FontWeight.Bold,
-                    Modifier.padding(10.dp, 0.dp)
-                )
+                BoldFontText(player.nameFull.uppercase())
                 Row {
-                    if (player.iscaptain) CaptainOrKeeperText(captain, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else CaptainOrKeeperText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
-                    if (player.iskeeper) CaptainOrKeeperText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else CaptainOrKeeperText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
+                    if (player.iscaptain) NormalFontText(captain, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else NormalFontText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
+                    if (player.iskeeper) NormalFontText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else NormalFontText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
                 }
                 if (player.iskeeper && player.iscaptain) {
-                    CaptainOrKeeperText("$captain |", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                    CaptainOrKeeperText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                    NormalFontText("$captain |", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                    NormalFontText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
                 }
             }
         }
@@ -233,7 +238,7 @@ private fun CardItem(player: PlayerInfoData) {
 }
 
 @Composable
-private fun CaptainOrKeeperText(text: String, modifier: Modifier) {
+private fun NormalFontText(text: String, modifier: Modifier) {
     TextComposable(
         1,
         text,
@@ -245,56 +250,119 @@ private fun CaptainOrKeeperText(text: String, modifier: Modifier) {
 }
 
 @Composable
-private fun PopUpCardItem() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.purple_200))
-    ) {
-        ElevatedCard(
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 6.dp
-            ),
-            colors = CardDefaults.cardColors(
-                containerColor = colorResource(R.color.lavendar),
-            ),
-            shape = RoundedCornerShape(15.dp),
+fun PopUpUi(isVisible: Boolean) {
+    if (isVisible) {
+        Box(
             modifier = Modifier
-                .padding(40.dp, 20.dp, 40.dp, 50.dp) //margin
-                .fillMaxWidth()
-                .height(450.dp)
-                .padding(10.dp, 5.dp) //padding
-                .align(Alignment.Center)
+                .fillMaxSize()
+                .background(colorResource(R.color.background))
         ) {
-            Column {
-                ImageComposable(
-                    painterResource(id = R.drawable.player),
-                    "Player Image",
-                    ContentScale.Inside,
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .fillMaxWidth()
-                        .size(220.dp)
-                        .clip(RoundedCornerShape(5))
-                        .background(colorResource(R.color.light_yellow))
-                )
-                Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    FilledButtonComposable(
-                        ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
-                        Modifier.padding(0.dp),
-                        "Batting",
-                        FontWeight.Bold,
-                    ) {}
-                    
+            ElevatedCard(
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = colorResource(R.color.lavendar),
+                ),
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .padding(40.dp, 20.dp, 40.dp, 40.dp) //margin
+                    .fillMaxWidth()
+                    .height(470.dp)
+                    .padding(10.dp, 5.dp) //padding
+                    .align(Alignment.Center)
+            ) {
+                Box {
+                    Column {
+                        ImageComposable(
+                            painterResource(id = R.drawable.player),
+                            "Player Image",
+                            ContentScale.Inside,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .fillMaxWidth()
+                                .size(200.dp)
+                                .clip(RoundedCornerShape(5))
+                                .background(colorResource(R.color.light_yellow))
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(0.dp, 0.dp, 0.dp, 10.dp),
+                            Arrangement.SpaceEvenly
+                        ) {
+                            Column {
+                                FilledButtonComposable(
+                                    ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                                    Modifier.padding(0.dp),
+                                    "Batting",
+                                    FontWeight.Bold,
+                                ) {}
+                                BoldFontText("RHB")
+                                NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                                BoldFontText("31.03")
+                                NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                                BoldFontText("73.7")
+                                NormalFontText("Strike-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                                BoldFontText("1738")
+                                NormalFontText("Runs", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                            }
+                            Column {
+                                FilledButtonComposable(
+                                    ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                                    Modifier.padding(0.dp),
+                                    "Bowling",
+                                    FontWeight.Bold,
+                                ) {}
+                                BoldFontText("OB")
+                                NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                                BoldFontText("31.45")
+                                NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                                BoldFontText("4.97")
+                                NormalFontText("Economy-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                                BoldFontText("24")
+                                NormalFontText("Wickets", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                            }
+                        }
+                    }
+                    IconButton(
+                        onClick = {
+//                            popUpVisible = true
+                        },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clip(CircleShape)
+                            .background(White)
+                            .size(20.dp)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "",
+                            Modifier.size(15.dp)
+                        )
+                    }
                 }
             }
         }
     }
 }
 
+@Composable
+private fun BoldFontText(text: String) {
+    TextComposable(
+        1,
+        text,
+        colorResource(R.color.black),
+        20.sp,
+        FontWeight.Bold,
+        Modifier.padding(10.dp, 0.dp)
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun UiPreview() {
 //    PlayerDetailsScreenUi(teamListData)
-    PopUpCardItem()
+    PopUpUi(true)
 }

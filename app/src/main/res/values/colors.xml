@@ -13,4 +13,5 @@
     <color name="lavendar">#e8def8</color>
     <color name="light_blue">#cfbaff</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="background">#52000000</color>
 </resources>
