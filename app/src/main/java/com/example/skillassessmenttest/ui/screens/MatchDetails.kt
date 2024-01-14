@@ -96,15 +96,17 @@ fun MatchDetailsScreenUi() {
             Modifier.padding(10.dp, 10.dp)
         )
 
-        FilledButtonComposable(
-            ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
-            Modifier.padding(10.dp),
-            "Match Details",
-            FontWeight.Bold,
-        ) {
-            context.startActivity(Intent(context, PlayersDetails::class.java).apply {
-                putExtra("list", teamData)
-            })
+        if (!teamData.isNullOrEmpty()) {
+            FilledButtonComposable(
+                ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
+                Modifier.padding(10.dp),
+                "Match Details",
+                FontWeight.Bold,
+            ) {
+                context.startActivity(Intent(context, PlayersDetails::class.java).apply {
+                    putExtra("list", teamData)
+                })
+            }
         }
     }
 }
