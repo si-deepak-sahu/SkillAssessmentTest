@@ -135,6 +135,6 @@ private fun SetDataToUi(apiData: MatchDetailsModel?) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun UiPreview() {
     Ui()
 }
