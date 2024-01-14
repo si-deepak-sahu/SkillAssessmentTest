@@ -133,8 +133,8 @@ private fun SetDataToUi(apiData: MatchDetailsModel?) {
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun UiPreview() {
-//    Ui()
-//}
+@Preview(showBackground = true)
+@Composable
+fun UiPreview() {
+    MatchDetailsScreenUi()
+}
