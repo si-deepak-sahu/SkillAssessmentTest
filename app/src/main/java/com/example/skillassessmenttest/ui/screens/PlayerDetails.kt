@@ -59,7 +59,8 @@ class PlayersDetails : ComponentActivity() {
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxWidth(),
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
                     color = colorResource(R.color.off_white)
                 ) {
                     list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
@@ -128,17 +129,7 @@ fun FilterButtons() {
     var filter by remember { mutableStateOf(true) }
 
     if (filter) {
-        FilledButtonComposable(
-            ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
-            Modifier
-                .padding(2.dp)
-                .width(130.dp),
-            "India",
-            FontWeight.Bold,
-        ) {
-            filter = true
-            listModification("India")
-        }
+        filter = filledButton(filter, "India")
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
             Modifier
@@ -173,7 +164,25 @@ fun FilterButtons() {
             filter = false
             listModification("New Zealand")
         }
+        
     }
+}
+
+@Composable
+private fun filledButton(filter: Boolean, teamName: String): Boolean {
+    var filter1 = filter
+    FilledButtonComposable(
+        ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
+        Modifier
+            .padding(2.dp)
+            .width(130.dp),
+        "India",
+        FontWeight.Bold,
+    ) {
+        filter1 = true
+        listModification(teamName)
+    }
+    return filter1
 }
 
 @Composable
@@ -216,67 +225,28 @@ private fun CardItem(player: PlayerInfoData) {
                     Modifier.padding(10.dp, 0.dp)
                 )
                 Row {
-                    if (player.iscaptain) {
-                        TextComposable(
-                            1,
-                            captain,
-                            colorResource(R.color.gray),
-                            14.sp,
-                            FontWeight.Normal,
-                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                        )
-                    } else {
-                        TextComposable(
-                            1,
-                            "",
-                            colorResource(R.color.gray),
-                            14.sp,
-                            FontWeight.Normal,
-                            Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                        )
-                    }
-                    if (player.iskeeper) {
-                        TextComposable(
-                            1,
-                            wicketKeeper,
-                            colorResource(R.color.gray),
-                            14.sp,
-                            FontWeight.Normal,
-                            Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
-                        )
-                    } else {
-                        TextComposable(
-                            1,
-                            "",
-                            colorResource(R.color.gray),
-                            14.sp,
-                            FontWeight.Normal,
-                            Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
-                        )
-                    }
+                    if (player.iscaptain) CaptainOrKeeperText(captain, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else CaptainOrKeeperText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
+                    if (player.iskeeper) CaptainOrKeeperText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else CaptainOrKeeperText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
                 }
-
                 if (player.iskeeper && player.iscaptain) {
-                    TextComposable(
-                        1,
-                        "$captain | ",
-                        colorResource(R.color.gray),
-                        14.sp,
-                        FontWeight.Normal,
-                        Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                    )
-                    TextComposable(
-                        1,
-                        wicketKeeper,
-                        colorResource(R.color.gray),
-                        14.sp,
-                        FontWeight.Normal,
-                        Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
-                    )
+                    CaptainOrKeeperText("$captain |", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                    CaptainOrKeeperText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
                 }
             }
         }
     }
+}
+
+@Composable
+private fun CaptainOrKeeperText(text: String, modifier: Modifier) {
+    TextComposable(
+        1,
+        text,
+        colorResource(R.color.gray),
+        14.sp,
+        FontWeight.Normal,
+        modifier
+    )
 }
 
 @Preview(showBackground = true)
