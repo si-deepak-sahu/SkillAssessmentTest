@@ -114,9 +114,9 @@ fun MatchDetailsScreenUi() {
 @Composable
 private fun SetDataToUi(apiData: MatchDetailsModel?) {
     if (apiData != null) {
-        date = apiData.matchdetail.match.date
-        time = apiData.matchdetail.match.time
-        venue = apiData.matchdetail.venue.name
+        date = apiData.matchdetail.match.date.trim()
+        time = apiData.matchdetail.match.time.trim()
+        venue = apiData.matchdetail.venue.name.trim()
         dateTimeVenue = "$date | $time\n$venue"
 
         teamData = apiData.teams
@@ -130,7 +130,7 @@ private fun SetDataToUi(apiData: MatchDetailsModel?) {
             }
         }
 
-        if (strBuilder.isNotEmpty()) matchBw = strBuilder.substring(0, strBuilder.length - 4)
+        if (strBuilder.isNotEmpty()) matchBw = strBuilder.substring(0, strBuilder.length - 4).trim()
     }
 }
 
