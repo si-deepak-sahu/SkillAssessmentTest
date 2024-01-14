@@ -129,36 +129,42 @@ fun FilterButtons() {
     var filter by remember { mutableStateOf(true) }
 
     if (filter) {
-        filter = filledButton(true, "India")
-        OutlinedButtonComposable(
-            ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
-            Modifier
-                .padding(2.dp)
-                .width(130.dp),
-            "New Zealand",
-            FontWeight.Bold,
-        ) {
+        FilledButton("India"){
+            filter = true
+            listModification("India")
+        }
+        OutlinedButton("New Zealand"){
             filter = false
             listModification("New Zealand")
         }
     } else {
-        OutlinedButtonComposable(
-            ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
-            Modifier
-                .padding(2.dp)
-                .width(130.dp),
-            "India",
-            FontWeight.Bold,
-        ) {
+        OutlinedButton("India"){
             filter = true
             listModification("India")
         }
-        filter = filledButton(false, "New Zealand")
+        FilledButton("New Zealand"){
+            filter = false
+            listModification("New Zealand")
+        }
     }
 }
 
 @Composable
-private fun filledButton(filterValue: Boolean, teamName: String): Boolean {
+private fun OutlinedButton(teamName: String, clickAction: () -> Unit) {
+    OutlinedButtonComposable(
+        ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
+        Modifier
+            .padding(2.dp)
+            .width(130.dp),
+        teamName,
+        FontWeight.Bold,
+    ) {
+        run { clickAction.invoke() }
+    }
+}
+
+@Composable
+private fun FilledButton(teamName: String, clickAction: () -> Unit){
     FilledButtonComposable(
         ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
         Modifier
@@ -167,10 +173,8 @@ private fun filledButton(filterValue: Boolean, teamName: String): Boolean {
         teamName,
         FontWeight.Bold,
     ) {
-        filterValue
-        listModification(teamName)
+        run { clickAction.invoke() }
     }
-    return filterValue
 }
 
 @Composable
