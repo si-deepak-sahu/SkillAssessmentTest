@@ -129,7 +129,7 @@ fun FilterButtons() {
     var filter by remember { mutableStateOf(true) }
 
     if (filter) {
-        filter = filledButton(filter, "India")
+        filter = filledButton(true, "India")
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
             Modifier
@@ -153,36 +153,24 @@ fun FilterButtons() {
             filter = true
             listModification("India")
         }
-        FilledButtonComposable(
-            ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
-            Modifier
-                .padding(2.dp)
-                .width(130.dp),
-            "New Zealand",
-            FontWeight.Bold,
-        ) {
-            filter = false
-            listModification("New Zealand")
-        }
-        
+        filter = filledButton(false, "New Zealand")
     }
 }
 
 @Composable
-private fun filledButton(filter: Boolean, teamName: String): Boolean {
-    var filter1 = filter
+private fun filledButton(filterValue: Boolean, teamName: String): Boolean {
     FilledButtonComposable(
         ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
         Modifier
             .padding(2.dp)
             .width(130.dp),
-        "India",
+        teamName,
         FontWeight.Bold,
     ) {
-        filter1 = true
+        filterValue
         listModification(teamName)
     }
-    return filter1
+    return filterValue
 }
 
 @Composable
