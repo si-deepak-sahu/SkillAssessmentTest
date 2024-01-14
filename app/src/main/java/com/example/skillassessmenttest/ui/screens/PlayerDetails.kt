@@ -46,8 +46,7 @@ import com.example.skillassessmenttest.ui.model.PlayerInfoData
 import com.example.skillassessmenttest.ui.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 
-
-var toolbarTitle = "Players"
+var toolbarTitle = ""
 var captain = "Captain 🎖️"
 var wicketKeeper = "Wicket Keeper 🧤"
 lateinit var list: HashMap<String, TeamData>
@@ -57,26 +56,23 @@ class PlayersDetails : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
-
-        listModificaiton("India")
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
+                Surface(modifier = Modifier.fillMaxWidth(),
                     color = colorResource(R.color.off_white)
                 ) {
-                    PlayerUi(teamListData)
+                    list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
+                    listModification("India")
+                    PlayerDetailsScreenUi(teamListData)
                 }
             }
         }
     }
 }
 
-fun listModificaiton(s: String) {
-    if (list != null) {
+fun listModification(s: String) {
+    if (list.isNotEmpty()) {
         for (i in list) {
             val key = i.key
             val title = list[key]?.nameFull.toString().trim()
@@ -91,7 +87,7 @@ fun listModificaiton(s: String) {
 
 
 @Composable
-fun PlayerUi(list: ArrayList<PlayerInfoData>?) {
+fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
     Column {
         Box(
             modifier = Modifier
@@ -111,7 +107,7 @@ fun PlayerUi(list: ArrayList<PlayerInfoData>?) {
         }
         Box {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(list!!) { player ->
+                if (!list.isNullOrEmpty()) items(list) { player ->
                     CardItem(player)
                 }
             }
@@ -129,9 +125,9 @@ fun PlayerUi(list: ArrayList<PlayerInfoData>?) {
 
 @Composable
 fun FilterButtons() {
-    var fillter by remember { mutableStateOf(true) }
+    var filter by remember { mutableStateOf(true) }
 
-    if (fillter) {
+    if (filter) {
         FilledButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
             Modifier
@@ -140,8 +136,8 @@ fun FilterButtons() {
             "India",
             FontWeight.Bold,
         ) {
-            fillter = true
-            listModificaiton("India")
+            filter = true
+            listModification("India")
         }
         OutlinedButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
@@ -151,8 +147,8 @@ fun FilterButtons() {
             "New Zealand",
             FontWeight.Bold,
         ) {
-            fillter = false
-            listModificaiton("New Zealand")
+            filter = false
+            listModification("New Zealand")
         }
     } else {
         OutlinedButtonComposable(
@@ -163,8 +159,8 @@ fun FilterButtons() {
             "India",
             FontWeight.Bold,
         ) {
-            fillter = true
-            listModificaiton("India")
+            filter = true
+            listModification("India")
         }
         FilledButtonComposable(
             ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
@@ -174,8 +170,8 @@ fun FilterButtons() {
             "New Zealand",
             FontWeight.Bold,
         ) {
-            fillter = false
-            listModificaiton("New Zealand")
+            filter = false
+            listModification("New Zealand")
         }
     }
 }
@@ -239,8 +235,6 @@ private fun CardItem(player: PlayerInfoData) {
                             Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
                         )
                     }
-
-
                     if (player.iskeeper) {
                         TextComposable(
                             1,
@@ -285,11 +279,8 @@ private fun CardItem(player: PlayerInfoData) {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    SkillAssessmentTestTheme {
-        PlayerUi(teamListData)
-    }
+fun UiPreview() {
+    PlayerDetailsScreenUi(teamListData)
 }
