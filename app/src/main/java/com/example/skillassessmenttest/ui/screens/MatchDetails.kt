@@ -48,7 +48,7 @@ class MatchDetails : ComponentActivity() {
         setContent {
             SkillAssessmentTestTheme {
                 Surface(modifier = Modifier.fillMaxWidth()) {
-                    Ui()
+                    MatchDetailsScreenUi()
                 }
             }
         }
@@ -57,7 +57,7 @@ class MatchDetails : ComponentActivity() {
 }
 
 @Composable
-fun Ui() {
+fun MatchDetailsScreenUi() {
     val context = LocalContext.current
     val apiData = viewModel.matchData.observeAsState().value
     SetDataToUi(apiData)
@@ -133,8 +133,8 @@ private fun SetDataToUi(apiData: MatchDetailsModel?) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun UiPreview() {
-    Ui()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun UiPreview() {
+//    Ui()
+//}
