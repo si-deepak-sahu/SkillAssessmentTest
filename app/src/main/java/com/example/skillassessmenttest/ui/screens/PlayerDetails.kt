@@ -82,7 +82,7 @@ class PlayersDetails : ComponentActivity() {
                     color = colorResource(R.color.off_white)
                 ) {
                     list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
-                    listModification("India")
+                    listModification("India", false, null, 0)
                     PlayerDetailsScreenUi(teamListData)
                     PopUpUi()
                 }
@@ -91,15 +91,28 @@ class PlayersDetails : ComponentActivity() {
     }
 }
 
-fun listModification(s: String) {
+fun listModification(s: String, isPlayerData: Boolean, listData: ArrayList<PlayerInfoData>?, index: Int) {
     if (list.isNotEmpty()) {
         for (i in list) {
             val key = i.key
             val title = list[key]?.nameFull.toString().trim()
             if (title.trim() == s) {
-                toolbarTitle = "$title Players"
-                teamListData = list[key]?.players?.values?.let { ArrayList(it) }
-                break
+                if (!isPlayerData) {
+                    toolbarTitle = "$title Players"
+                    teamListData = list[key]?.players?.values?.let { ArrayList(it) }
+                    break
+                } else {
+                    val playerListData = list[key]?.players as HashMap<String, PlayerInfoData>
+                    for (j in playerListData) {
+                        val playerKey = j.key
+                        val playerName = playerListData[playerKey]?.nameFull.toString().trim()
+                        if (listData!![index].nameFull == playerName) {
+                            battingData = playerListData[playerKey]?.batting
+                            bowlingData = playerListData[playerKey]?.bowling
+                            break
+                        }
+                    }
+                }
             }
         }
     }
@@ -132,22 +145,7 @@ fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
                 if (!listData.isNullOrEmpty()) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
-                            for (i in list) {
-                                val key = i.key
-                                val title = list[key]?.nameFull.toString().trim()
-                                if (title.trim() == "India") {
-                                    val playerListData = list[key]?.players as HashMap<String, PlayerInfoData>
-                                    for (j in playerListData) {
-                                        val playerKey = j.key
-                                        val playerName = playerListData[playerKey]?.nameFull.toString().trim()
-                                        if (listData[index].nameFull == playerName) {
-                                            battingData = playerListData[playerKey]?.batting
-                                            bowlingData = playerListData[playerKey]?.bowling
-                                            break
-                                        }
-                                    }
-                                }
-                            }
+                            listModification("India", true, listData, index)
                             mainViewModel.OpenDialog()
                             mainViewModel.SetPlayerName(teamListData?.get(index)?.nameFull.toString())
                         }
@@ -173,20 +171,20 @@ fun FilterButtons() {
     if (filter) {
         FilledButton("India") {
             filter = true
-            listModification("India")
+            listModification("India", false, null, 0)
         }
         OutlinedButton("New Zealand") {
             filter = false
-            listModification("New Zealand")
+            listModification("New Zealand", false, null, 0)
         }
     } else {
         OutlinedButton("India") {
             filter = true
-            listModification("India")
+            listModification("India", false, null, 0)
         }
         FilledButton("New Zealand") {
             filter = false
-            listModification("New Zealand")
+            listModification("New Zealand", false, null, 0)
         }
     }
 }
