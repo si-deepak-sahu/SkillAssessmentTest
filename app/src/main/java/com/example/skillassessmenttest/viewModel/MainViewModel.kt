@@ -37,6 +37,12 @@ class MainViewModel : ViewModel() {
         isPopUpShown = false
     }
 
+    var playerName by mutableStateOf("")
+        private set
+    fun SetPlayerName(name:String){
+        playerName = name
+    }
+
     var errorMessage: String = ""
         private set
 

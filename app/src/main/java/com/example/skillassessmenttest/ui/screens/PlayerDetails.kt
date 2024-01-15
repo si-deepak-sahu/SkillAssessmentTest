@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -53,6 +54,8 @@ import com.example.skillassessmenttest.ui.component.ImageComposable
 import com.example.skillassessmenttest.ui.component.NoRippleFilledButtonComposable
 import com.example.skillassessmenttest.ui.component.OutlinedButtonComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
+import com.example.skillassessmenttest.ui.model.Batting
+import com.example.skillassessmenttest.ui.model.Bowling
 import com.example.skillassessmenttest.ui.model.PlayerInfoData
 import com.example.skillassessmenttest.ui.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
@@ -64,6 +67,8 @@ var wicketKeeper = "Wicket Keeper 🧤"
 lateinit var list: HashMap<String, TeamData>
 var teamListData: ArrayList<PlayerInfoData>? = null
 private var mainViewModel = MainViewModel()
+var bowlingData: Bowling? = null
+var battingData: Batting? = null
 
 class PlayersDetails : ComponentActivity() {
 
@@ -102,7 +107,7 @@ fun listModification(s: String) {
 
 
 @Composable
-fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
+fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
 
     Column {
         Box(
@@ -124,9 +129,28 @@ fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
         }
         Box {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                if (!list.isNullOrEmpty()) items(list) { player ->
-                    CardItem(player) {
-                        mainViewModel.OpenDialog()
+                if (!listData.isNullOrEmpty()) {
+                    itemsIndexed(listData) { index, player ->
+                        CardItem(player) {
+                            for (i in list) {
+                                val key = i.key
+                                val title = list[key]?.nameFull.toString().trim()
+                                if (title.trim() == "India") {
+                                    val playerListData = list[key]?.players as HashMap<String, PlayerInfoData>
+                                    for (j in playerListData) {
+                                        val playerKey = j.key
+                                        val playerName = playerListData[playerKey]?.nameFull.toString().trim()
+                                        if (listData[index].nameFull == playerName) {
+                                            battingData = playerListData[playerKey]?.batting
+                                            bowlingData = playerListData[playerKey]?.bowling
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+                            mainViewModel.OpenDialog()
+                            mainViewModel.SetPlayerName(teamListData?.get(index)?.nameFull.toString())
+                        }
                     }
                 }
             }
@@ -228,7 +252,7 @@ private fun CardItem(player: PlayerInfoData, onClickStartSource: () -> Unit) {
                     .fillMaxHeight()
                     .padding(0.dp, 40.dp)
             ) {
-                BoldFontText(player.nameFull.uppercase())
+                BoldFontText(player.nameFull.uppercase(), Modifier.padding(10.dp, 0.dp))
                 Row {
                     if (player.iscaptain) NormalFontText(captain, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else NormalFontText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
                     if (player.iskeeper) NormalFontText(wicketKeeper, Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)) else NormalFontText("", Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp))
@@ -278,8 +302,8 @@ fun PopUpUi() {
                         .padding(10.dp, 5.dp) //padding
                         .align(Alignment.Center)
                 ) {
-                    Box {
-                        Column {
+                    Column {
+                        Box(modifier = Modifier.height(200.dp)) {
                             ImageComposable(
                                 painterResource(id = R.drawable.player),
                                 "Player Image",
@@ -291,6 +315,42 @@ fun PopUpUi() {
                                     .clip(RoundedCornerShape(5))
                                     .background(colorResource(R.color.light_yellow))
                             )
+                            IconButton(
+                                onClick = {
+                                    mainViewModel.CloseDialog()
+                                },
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .clip(CircleShape)
+                                    .background(White)
+                                    .size(20.dp)
+                                    .align(Alignment.TopEnd)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Close,
+                                    contentDescription = "",
+                                    Modifier.size(15.dp)
+                                )
+                            }
+                            BoldFontText(
+                                mainViewModel.playerName,
+                                Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(0.dp, 0.dp, 10.dp, 10.dp))
+                                    .align(Alignment.BottomStart)
+                                    .background(
+                                        brush = Brush.verticalGradient(
+                                            colors = listOf(
+                                                colorResource(R.color.transparent),
+                                                colorResource(R.color.light_yellow)
+                                            )
+                                        )
+                                    )
+                                    .padding(10.dp, 15.dp, 10.dp, 2.dp)
+                            )
+                        }
+                        if (bowlingData != null && battingData != null) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -304,14 +364,22 @@ fun PopUpUi() {
                                         "Batting",
                                         FontWeight.Bold,
                                     ) {}
-                                    BoldFontText("RHB")
-                                    NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
-                                    BoldFontText("31.03")
-                                    NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
-                                    BoldFontText("73.7")
-                                    NormalFontText("Strike-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
-                                    BoldFontText("1738")
-                                    NormalFontText("Runs", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    if (battingData!!.style.isNotEmpty()) {
+                                        BoldFontText(battingData!!.style, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
+                                    if (battingData!!.average.isNotEmpty()) {
+                                        BoldFontText(battingData!!.average, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
+                                    if (battingData!!.strikerate.isNotEmpty()) {
+                                        BoldFontText(battingData!!.strikerate, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Strike-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
+                                    if (battingData!!.runs.isNotEmpty()) {
+                                        BoldFontText(battingData!!.runs, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Runs", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
                                 }
                                 Column {
                                     NoRippleFilledButtonComposable(
@@ -320,50 +388,43 @@ fun PopUpUi() {
                                         "Bowling",
                                         FontWeight.Bold,
                                     ) {}
-                                    BoldFontText("OB")
-                                    NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
-                                    BoldFontText("31.45")
-                                    NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
-                                    BoldFontText("4.97")
-                                    NormalFontText("Economy-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
-                                    BoldFontText("24")
-                                    NormalFontText("Wickets", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    if (bowlingData!!.style.isNotEmpty()) {
+                                        BoldFontText(bowlingData!!.style, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
+                                    if (bowlingData!!.average.isNotEmpty()) {
+                                        BoldFontText(bowlingData!!.average, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
+                                    if (bowlingData!!.economyrate.isNotEmpty()) {
+                                        BoldFontText(bowlingData!!.economyrate, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Economy-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
+                                    if (bowlingData!!.wickets.isNotEmpty()) {
+                                        BoldFontText(bowlingData!!.wickets, Modifier.padding(10.dp, 0.dp))
+                                        NormalFontText("Wickets", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    }
                                 }
                             }
                         }
-                        IconButton(
-                            onClick = {
-                                mainViewModel.CloseDialog()
-                            },
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .clip(CircleShape)
-                                .background(White)
-                                .size(20.dp)
-                                .align(Alignment.TopEnd)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = "",
-                                Modifier.size(15.dp)
-                            )
-                        }
                     }
+
                 }
             }
+
         }
     }
 }
 
 @Composable
-private fun BoldFontText(text: String) {
+private fun BoldFontText(text: String, modifier: Modifier) {
     TextComposable(
         1,
         text,
         colorResource(R.color.black),
         20.sp,
         FontWeight.Bold,
-        Modifier.padding(10.dp, 0.dp),
+        modifier,
         false
     )
 }
