@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -141,7 +142,11 @@ fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
             )
         }
         Box {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(contentPadding = PaddingValues(bottom = 60.dp),
+                modifier = Modifier
+                .fillMaxSize()
+            )
+            {
                 if (!listData.isNullOrEmpty()) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
