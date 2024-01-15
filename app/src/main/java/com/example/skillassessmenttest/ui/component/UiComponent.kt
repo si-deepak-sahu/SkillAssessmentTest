@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -18,7 +20,7 @@ import androidx.compose.ui.unit.TextUnit
 import okhttp3.Interceptor.Companion.invoke
 
 @Composable
-fun TextComposable(maxLines: Int, text: String, color: Color, textSize: TextUnit, fontStyle: FontWeight, modifier: Modifier) {
+fun TextComposable(maxLines: Int, text: String, color: Color, textSize: TextUnit, fontStyle: FontWeight, modifier: Modifier, includeFontPadding: Boolean) {
     Text(
         maxLines = maxLines,
         text = text,
@@ -28,6 +30,11 @@ fun TextComposable(maxLines: Int, text: String, color: Color, textSize: TextUnit
         overflow = TextOverflow.Ellipsis,
         fontWeight = fontStyle,
         modifier = modifier,
+        style = TextStyle(
+            platformStyle = PlatformTextStyle(
+                includeFontPadding = includeFontPadding
+            ),
+        )
     )
 }
 

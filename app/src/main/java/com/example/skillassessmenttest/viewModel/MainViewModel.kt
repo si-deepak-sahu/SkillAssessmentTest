@@ -27,7 +27,7 @@ class MainViewModel : ViewModel() {
     private val _isError = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> get() = _isError
 
-    var isPopUpShown by mutableStateOf(false)
+    var isPopUpShown by mutableStateOf(true)
         private set
 
     fun OpenDialog(){

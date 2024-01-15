@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -29,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,14 +42,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.skillassessmenttest.R
 import com.example.skillassessmenttest.ui.component.FilledButtonComposable
 import com.example.skillassessmenttest.ui.component.ImageComposable
@@ -115,7 +126,8 @@ fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
                 FontWeight.Bold,
                 Modifier
                     .padding(10.dp, 15.dp)
-                    .align(Alignment.TopCenter)
+                    .align(Alignment.TopCenter),
+                false
             )
         }
         Box {
@@ -246,102 +258,104 @@ private fun NormalFontText(text: String, modifier: Modifier) {
         colorResource(R.color.gray),
         14.sp,
         FontWeight.Normal,
-        modifier
+        modifier,
+        false
     )
 }
 
 @Composable
 fun PopUpUi() {
     if (mainViewModel.isPopUpShown) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.background))
-        ) {
-            ElevatedCard(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = colorResource(R.color.lavendar),
-                ),
-                shape = RoundedCornerShape(15.dp),
+        Dialog(onDismissRequest = {}, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+            Box(
                 modifier = Modifier
-                    .padding(40.dp, 20.dp, 40.dp, 40.dp) //margin
-                    .fillMaxWidth()
-                    .height(470.dp)
-                    .padding(10.dp, 5.dp) //padding
-                    .align(Alignment.Center)
+                    .fillMaxSize()
+                    .background(colorResource(R.color.transparent))
             ) {
-                Box {
-                    Column {
-                        ImageComposable(
-                            painterResource(id = R.drawable.player),
-                            "Player Image",
-                            ContentScale.Inside,
-                            modifier = Modifier
-                                .padding(5.dp)
-                                .fillMaxWidth()
-                                .size(200.dp)
-                                .clip(RoundedCornerShape(5))
-                                .background(colorResource(R.color.light_yellow))
-                        )
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(0.dp, 0.dp, 0.dp, 10.dp),
-                            Arrangement.SpaceEvenly
-                        ) {
-                            Column {
-                                FilledButtonComposable(
-                                    ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
-                                    Modifier.padding(0.dp),
-                                    "Batting",
-                                    FontWeight.Bold,
-                                ) {}
-                                BoldFontText("RHB")
-                                NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                                BoldFontText("31.03")
-                                NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                                BoldFontText("73.7")
-                                NormalFontText("Strike-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                                BoldFontText("1738")
-                                NormalFontText("Runs", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                            }
-                            Column {
-                                FilledButtonComposable(
-                                    ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
-                                    Modifier.padding(0.dp),
-                                    "Bowling",
-                                    FontWeight.Bold,
-                                ) {}
-                                BoldFontText("OB")
-                                NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                                BoldFontText("31.45")
-                                NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                                BoldFontText("4.97")
-                                NormalFontText("Economy-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
-                                BoldFontText("24")
-                                NormalFontText("Wickets", Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp))
+                ElevatedCard(
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = colorResource(R.color.lavendar),
+                    ),
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier
+                        .padding(40.dp, 20.dp, 40.dp, 40.dp) //margin
+                        .fillMaxWidth()
+                        .padding(10.dp, 5.dp) //padding
+                        .align(Alignment.Center)
+                ) {
+                    Box {
+                        Column {
+                            ImageComposable(
+                                painterResource(id = R.drawable.player),
+                                "Player Image",
+                                ContentScale.Inside,
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth()
+                                    .size(200.dp)
+                                    .clip(RoundedCornerShape(5))
+                                    .background(colorResource(R.color.light_yellow))
+                            )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(0.dp, 0.dp, 0.dp, 10.dp),
+                                Arrangement.SpaceEvenly
+                            ) {
+                                Column {
+                                    FilledButtonComposable(
+                                        ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                                        Modifier.padding(0.dp, 5.dp),
+                                        "Batting",
+                                        FontWeight.Bold,
+                                    ) {}
+                                    BoldFontText("RHB")
+                                    NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    BoldFontText("31.03")
+                                    NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    BoldFontText("73.7")
+                                    NormalFontText("Strike-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    BoldFontText("1738")
+                                    NormalFontText("Runs", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                }
+                                Column {
+                                    FilledButtonComposable(
+                                        ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                                        Modifier.padding(0.dp, 5.dp),
+                                        "Bowling",
+                                        FontWeight.Bold,
+                                    ) {}
+                                    BoldFontText("OB")
+                                    NormalFontText("Style", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    BoldFontText("31.45")
+                                    NormalFontText("Average", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    BoldFontText("4.97")
+                                    NormalFontText("Economy-rate", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                    BoldFontText("24")
+                                    NormalFontText("Wickets", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
+                                }
                             }
                         }
-                    }
-                    IconButton(
-                        onClick = {
-                            mainViewModel.CloseDialog()
-                        },
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .clip(CircleShape)
-                            .background(White)
-                            .size(20.dp)
-                            .align(Alignment.TopEnd)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = "",
-                            Modifier.size(15.dp)
-                        )
+                        IconButton(
+                            onClick = {
+                                mainViewModel.CloseDialog()
+                            },
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(CircleShape)
+                                .background(White)
+                                .size(20.dp)
+                                .align(Alignment.TopEnd)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = "",
+                                Modifier.size(15.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -357,7 +371,8 @@ private fun BoldFontText(text: String) {
         colorResource(R.color.black),
         20.sp,
         FontWeight.Bold,
-        Modifier.padding(10.dp, 0.dp)
+        Modifier.padding(10.dp, 0.dp),
+        false
     )
 }
 
@@ -367,3 +382,4 @@ fun UiPreview() {
 //    PlayerDetailsScreenUi(teamListData)
     PopUpUi()
 }
+
