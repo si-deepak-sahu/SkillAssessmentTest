@@ -99,7 +99,11 @@ fun listModification(s: String, isPlayerData: Boolean, listData: ArrayList<Playe
             val title = list[key]?.nameFull.toString().trim()
             if (title.trim() == s) {
                 if (!isPlayerData) {
-                    toolbarTitle = "$title Players"
+                    toolbarTitle = if (title == "India") {
+                        "Indian Players"
+                    }else{
+                        "$title Players"
+                    }
                     teamListData = list[key]?.players?.values?.let { ArrayList(it) }
                     break
                 } else {
