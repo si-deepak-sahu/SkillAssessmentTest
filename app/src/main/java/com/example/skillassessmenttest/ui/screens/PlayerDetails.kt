@@ -268,7 +268,7 @@ fun PopUpUi() {
                         defaultElevation = 6.dp
                     ),
                     colors = CardDefaults.cardColors(
-                        containerColor = colorResource(R.color.lavendar),
+                        containerColor = colorResource(R.color.off_white),
                     ),
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
@@ -298,7 +298,7 @@ fun PopUpUi() {
                             ) {
                                 Column {
                                     FilledButtonComposable(
-                                        ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                                        ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
                                         Modifier.padding(0.dp, 5.dp),
                                         "Batting",
                                         FontWeight.Bold,
@@ -314,7 +314,7 @@ fun PopUpUi() {
                                 }
                                 Column {
                                     FilledButtonComposable(
-                                        ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200)),
+                                        ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
                                         Modifier.padding(0.dp, 5.dp),
                                         "Bowling",
                                         FontWeight.Bold,
