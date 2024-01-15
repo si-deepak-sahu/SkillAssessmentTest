@@ -53,12 +53,14 @@ import com.example.skillassessmenttest.ui.component.TextComposable
 import com.example.skillassessmenttest.ui.model.PlayerInfoData
 import com.example.skillassessmenttest.ui.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
+import com.example.skillassessmenttest.viewModel.MainViewModel
 
 var toolbarTitle = ""
 var captain = "Captain 🎖️"
 var wicketKeeper = "Wicket Keeper 🧤"
 lateinit var list: HashMap<String, TeamData>
 var teamListData: ArrayList<PlayerInfoData>? = null
+private var mainViewModel = MainViewModel()
 
 class PlayersDetails : ComponentActivity() {
 
@@ -74,7 +76,7 @@ class PlayersDetails : ComponentActivity() {
                     list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
                     listModification("India")
                     PlayerDetailsScreenUi(teamListData)
-                    PopUpUi(true)
+                    PopUpUi()
                 }
             }
         }
@@ -98,7 +100,6 @@ fun listModification(s: String) {
 
 @Composable
 fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
-    var popUpVisible by remember { mutableStateOf(false) }
 
     Column {
         Box(
@@ -121,7 +122,7 @@ fun PlayerDetailsScreenUi(list: ArrayList<PlayerInfoData>?) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 if (!list.isNullOrEmpty()) items(list) { player ->
                     CardItem(player) {
-                        popUpVisible = true
+                        mainViewModel.OpenDialog()
                     }
                 }
             }
@@ -250,8 +251,8 @@ private fun NormalFontText(text: String, modifier: Modifier) {
 }
 
 @Composable
-fun PopUpUi(isVisible: Boolean) {
-    if (isVisible) {
+fun PopUpUi() {
+    if (mainViewModel.isPopUpShown) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -327,7 +328,7 @@ fun PopUpUi(isVisible: Boolean) {
                     }
                     IconButton(
                         onClick = {
-//                            popUpVisible = true
+                            mainViewModel.CloseDialog()
                         },
                         modifier = Modifier
                             .padding(10.dp)
@@ -364,5 +365,5 @@ private fun BoldFontText(text: String) {
 @Composable
 fun UiPreview() {
 //    PlayerDetailsScreenUi(teamListData)
-    PopUpUi(true)
+    PopUpUi()
 }

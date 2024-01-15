@@ -1,5 +1,8 @@
 package com.example.skillassessmenttest.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +26,16 @@ class MainViewModel : ViewModel() {
 
     private val _isError = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> get() = _isError
+
+    var isPopUpShown by mutableStateOf(false)
+        private set
+
+    fun OpenDialog(){
+        isPopUpShown = true
+    }
+    fun CloseDialog(){
+        isPopUpShown = false
+    }
 
     var errorMessage: String = ""
         private set
