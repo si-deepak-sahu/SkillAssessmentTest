@@ -50,6 +50,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.skillassessmenttest.R
 import com.example.skillassessmenttest.ui.component.FilledButtonComposable
 import com.example.skillassessmenttest.ui.component.ImageComposable
+import com.example.skillassessmenttest.ui.component.NoRippleFilledButtonComposable
 import com.example.skillassessmenttest.ui.component.OutlinedButtonComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
 import com.example.skillassessmenttest.ui.model.PlayerInfoData
@@ -297,7 +298,7 @@ fun PopUpUi() {
                                 Arrangement.SpaceEvenly
                             ) {
                                 Column {
-                                    FilledButtonComposable(
+                                    NoRippleFilledButtonComposable(
                                         ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
                                         Modifier.padding(0.dp, 5.dp),
                                         "Batting",
@@ -313,7 +314,7 @@ fun PopUpUi() {
                                     NormalFontText("Runs", Modifier.padding(10.dp, 0.dp, 0.dp, 7.dp))
                                 }
                                 Column {
-                                    FilledButtonComposable(
+                                    NoRippleFilledButtonComposable(
                                         ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
                                         Modifier.padding(0.dp, 5.dp),
                                         "Bowling",

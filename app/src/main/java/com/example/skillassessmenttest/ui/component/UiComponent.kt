@@ -1,6 +1,8 @@
 package com.example.skillassessmenttest.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.interaction.Interaction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.OutlinedButton
@@ -16,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun TextComposable(maxLines: Int, text: String, color: Color, textSize: TextUnit, fontStyle: FontWeight, modifier: Modifier, includeFontPadding: Boolean) {
@@ -41,11 +45,30 @@ fun FilledButtonComposable(buttonColor: ButtonColors, modifier: Modifier, btnTex
     Button(
         onClick = clickAction::invoke,
         colors = buttonColor,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(btnText,
             fontWeight = fontStyle )
     }
+}
+
+@Composable
+fun NoRippleFilledButtonComposable(buttonColor: ButtonColors, modifier: Modifier, btnText: String, fontStyle: FontWeight, clickAction: () -> Unit) {
+    Button(
+        onClick = clickAction::invoke,
+        colors = buttonColor,
+        modifier = modifier,
+        interactionSource = NoRippleInteractionSource()
+    ) {
+        Text(btnText,
+            fontWeight = fontStyle )
+    }
+}
+
+class NoRippleInteractionSource : MutableInteractionSource {
+    override val interactions: Flow<Interaction> = emptyFlow()
+    override suspend fun emit(interaction: Interaction) {}
+    override fun tryEmit(interaction: Interaction) = true
 }
 
 @Composable
