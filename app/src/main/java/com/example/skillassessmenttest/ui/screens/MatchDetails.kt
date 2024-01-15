@@ -85,7 +85,8 @@ fun MatchDetailsScreenUi() {
             FontWeight.Normal,
             Modifier
                 .padding(10.dp, 40.dp)
-                .weight(1f)
+                .weight(1f),
+            false
         )
         TextComposable(
             3,
@@ -93,7 +94,8 @@ fun MatchDetailsScreenUi() {
             colorResource(R.color.white),
             30.sp,
             FontWeight.Bold,
-            Modifier.padding(10.dp, 10.dp)
+            Modifier.padding(10.dp, 10.dp),
+            false
         )
 
         if (!teamData.isNullOrEmpty()) {
@@ -135,8 +137,8 @@ private fun SetDataToUi(apiData: MatchDetailsModel?) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun UiPreview() {
-    MatchDetailsScreenUi()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun UiPreview() {
+//    MatchDetailsScreenUi()
+//}
