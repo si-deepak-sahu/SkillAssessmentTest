@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -126,6 +127,13 @@ fun listModification(s: String, isPlayerData: Boolean, listData: List<PlayerInfo
 
 @Composable
 fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
+
+    DisposableEffect(key1 = Unit, effect = {
+        onDispose {
+            //Code inside will work as the last thing after leaving the screen
+            countryName = "India"
+        }
+    })
 
     Column {
         Box(
