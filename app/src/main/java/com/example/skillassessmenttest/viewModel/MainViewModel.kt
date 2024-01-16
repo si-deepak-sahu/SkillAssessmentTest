@@ -39,7 +39,7 @@ class MainViewModel : ViewModel() {
 
     var playerName by mutableStateOf("")
         private set
-    fun setPlayerName(name:String){
+    fun SetPlayerName(name:String){
         playerName = name
     }
 

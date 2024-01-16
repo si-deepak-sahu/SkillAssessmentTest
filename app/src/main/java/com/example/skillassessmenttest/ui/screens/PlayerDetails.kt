@@ -156,7 +156,7 @@ fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
                         CardItem(player) {
                             listModification("India", true, listData, index)
                             mainViewModel.openDialog()
-                            mainViewModel.setPlayerName(teamListData?.get(index)?.nameFull.toString())
+                            mainViewModel.SetPlayerName(teamListData?.get(index)?.nameFull.toString())
                         }
                     }
                 }
