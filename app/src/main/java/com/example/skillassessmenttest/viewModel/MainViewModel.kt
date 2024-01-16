@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.skillassessmenttest.model.MatchDetailsModel
 import com.example.skillassessmenttest.networking.ApiConfig
+import com.example.skillassessmenttest.ui.model.PlayerInfoData
 import com.example.skillassessmenttest.ui.model.TeamData
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,6 +40,11 @@ class MainViewModel : ViewModel() {
     var playerName by mutableStateOf("")
     fun SetPlayerName(name:String){
         playerName = name
+    }
+    var teamListData by mutableStateOf(listOf<PlayerInfoData>())
+
+    fun setTeamListData(data: ArrayList<PlayerInfoData>?){
+        teamListData = data!!
     }
 
     var errorMessage: String = ""

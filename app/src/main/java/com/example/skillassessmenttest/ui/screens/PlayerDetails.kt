@@ -66,7 +66,6 @@ var toolbarTitle = ""
 var captain = "Captain 🎖️"
 var wicketKeeper = "Wicket Keeper 🧤"
 lateinit var list: HashMap<String, TeamData>
-var teamListData: ArrayList<PlayerInfoData>? = null
 private var mainViewModel = MainViewModel()
 var bowlingData: Bowling? = null
 var battingData: Batting? = null
@@ -75,6 +74,8 @@ class PlayersList : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
+        listModification("India", false, null, 0)
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
@@ -82,9 +83,7 @@ class PlayersList : ComponentActivity() {
                     modifier = Modifier.fillMaxWidth(),
                     color = colorResource(R.color.off_white)
                 ) {
-                    list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
-                    listModification("India", false, null, 0)
-                    PlayerDetailsScreenUi(teamListData)
+                    PlayerDetailsScreenUi(mainViewModel.teamListData)
                     PopUpUi()
                 }
             }
@@ -92,7 +91,7 @@ class PlayersList : ComponentActivity() {
     }
 }
 
-fun listModification(s: String, isPlayerData: Boolean, listData: ArrayList<PlayerInfoData>?, index: Int) {
+fun listModification(s: String, isPlayerData: Boolean, listData: List<PlayerInfoData>?, index: Int) {
     if (list.isNotEmpty()) {
         for (i in list) {
             val key = i.key
@@ -104,7 +103,7 @@ fun listModification(s: String, isPlayerData: Boolean, listData: ArrayList<Playe
                     }else{
                         "$title Players"
                     }
-                    teamListData = list[key]?.players?.values?.let { ArrayList(it) }
+                    mainViewModel.setTeamListData(list[key]?.players?.values?.let { ArrayList(it) })
                     break
                 } else {
                     val playerListData = list[key]?.players as HashMap<String, PlayerInfoData>
@@ -125,7 +124,7 @@ fun listModification(s: String, isPlayerData: Boolean, listData: ArrayList<Playe
 
 
 @Composable
-fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
+fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
 
     Column {
         Box(
@@ -151,12 +150,12 @@ fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
                 .fillMaxSize()
             )
             {
-                if (!listData.isNullOrEmpty()) {
+                if (listData.isNotEmpty()) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
                             listModification("India", true, listData, index)
                             mainViewModel.openDialog()
-                            mainViewModel.SetPlayerName(teamListData?.get(index)?.nameFull.toString())
+                            mainViewModel.SetPlayerName(mainViewModel.teamListData[index].nameFull)
                         }
                     }
                 }
