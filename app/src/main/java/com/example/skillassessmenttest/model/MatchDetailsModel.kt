@@ -1,5 +1,4 @@
 package com.example.skillassessmenttest.model
-import com.example.skillassessmenttest.ui.model.TeamData
 import com.google.gson.annotations.SerializedName
 
 data class MatchDetailsModel(

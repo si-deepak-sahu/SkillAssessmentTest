@@ -45,7 +45,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -56,10 +55,10 @@ import com.example.skillassessmenttest.ui.component.ImageComposable
 import com.example.skillassessmenttest.ui.component.NoRippleFilledButtonComposable
 import com.example.skillassessmenttest.ui.component.OutlinedButtonComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
-import com.example.skillassessmenttest.ui.model.Batting
-import com.example.skillassessmenttest.ui.model.Bowling
-import com.example.skillassessmenttest.ui.model.PlayerInfoData
-import com.example.skillassessmenttest.ui.model.TeamData
+import com.example.skillassessmenttest.model.Batting
+import com.example.skillassessmenttest.model.Bowling
+import com.example.skillassessmenttest.model.PlayerInfoData
+import com.example.skillassessmenttest.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 import com.example.skillassessmenttest.viewModel.MainViewModel
 

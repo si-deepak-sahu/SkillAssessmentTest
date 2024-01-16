@@ -36,7 +36,7 @@ import com.example.skillassessmenttest.model.MatchDetailsModel
 import com.example.skillassessmenttest.ui.component.FilledButtonComposable
 import com.example.skillassessmenttest.ui.component.ImageComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
-import com.example.skillassessmenttest.ui.model.TeamData
+import com.example.skillassessmenttest.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 import com.example.skillassessmenttest.viewModel.MainViewModel
 

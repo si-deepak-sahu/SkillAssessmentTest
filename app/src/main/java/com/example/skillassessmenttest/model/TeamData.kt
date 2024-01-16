@@ -1,4 +1,4 @@
-package com.example.skillassessmenttest.ui.model
+package com.example.skillassessmenttest.model
 
 
 import com.google.gson.annotations.SerializedName
