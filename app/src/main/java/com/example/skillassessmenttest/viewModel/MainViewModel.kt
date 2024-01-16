@@ -28,7 +28,6 @@ class MainViewModel : ViewModel() {
     val isError: LiveData<Boolean> get() = _isError
 
     var isPopUpShown by mutableStateOf(false)
-        private set
 
     fun openDialog(){
         isPopUpShown = true
@@ -38,7 +37,6 @@ class MainViewModel : ViewModel() {
     }
 
     var playerName by mutableStateOf("")
-        private set
     fun SetPlayerName(name:String){
         playerName = name
     }
