@@ -5,14 +5,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -20,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.skillassessmenttest.R
@@ -61,53 +70,65 @@ fun MatchDetailsScreenUi() {
     val apiData = viewModel.matchData.observeAsState().value
     SetDataToUi(apiData)
 
-    ImageComposable(
-        painterResource(id = R.drawable.team),
-        "Team Image",
-        ContentScale.Crop,
-        Modifier
-            .fillMaxWidth()
-            .height(400.dp)
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(400.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TextComposable(
-            3,
-            dateTimeVenue,
-            colorResource(R.color.off_white),
-            14.sp,
-            FontWeight.Normal,
-            Modifier
-                .padding(10.dp, 40.dp)
-                .weight(1f),
-            false
-        )
-        TextComposable(
-            3,
-            matchBw,
-            colorResource(R.color.white),
-            30.sp,
-            FontWeight.Bold,
-            Modifier.padding(10.dp, 10.dp),
-            false
-        )
+    var progress by remember { mutableStateOf(true) }
 
-        if (!teamData.isNullOrEmpty()) {
-            FilledButtonComposable(
-                ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
-                Modifier.padding(10.dp),
-                "Match Details",
+    Box {
+        ImageComposable(
+            painterResource(id = R.drawable.team),
+            "Team Image",
+            ContentScale.Crop,
+            Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TextComposable(
+                3,
+                dateTimeVenue,
+                colorResource(R.color.off_white),
+                14.sp,
+                FontWeight.Normal,
+                Modifier
+                    .padding(10.dp, 40.dp)
+                    .weight(1f),
+                false
+            )
+            TextComposable(
+                3,
+                matchBw,
+                colorResource(R.color.white),
+                30.sp,
                 FontWeight.Bold,
-            ) {
-                context.startActivity(Intent(context, PlayersList::class.java).apply {
-                    putExtra("list", teamData)
-                })
+                Modifier.padding(10.dp, 10.dp),
+                false
+            )
+
+            if (!teamData.isNullOrEmpty()) {
+                progress = false
+                FilledButtonComposable(
+                    ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
+                    Modifier.padding(10.dp),
+                    "Match Details",
+                    FontWeight.Bold,
+                ) {
+                    context.startActivity(Intent(context, PlayersList::class.java).apply {
+                        putExtra("list", teamData)
+                    })
+                }
             }
+        }
+        if (progress) {
+            CircularProgressIndicator(
+                modifier = Modifier.width(40.dp).align(Alignment.Center),
+                color = MaterialTheme.colorScheme.secondary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
         }
     }
 }
@@ -136,8 +157,8 @@ private fun SetDataToUi(apiData: MatchDetailsModel?) {
 }
 
 
-//@Preview(showBackground = true)
-//@Composable
-//fun UiPreview() {
-//    MatchDetailsScreenUi()
-//}
+@Preview(showBackground = true)
+@Composable
+fun UiPreview() {
+    MatchDetailsScreenUi()
+}

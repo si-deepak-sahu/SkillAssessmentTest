@@ -441,10 +441,10 @@ private fun BoldFontText(text: String, modifier: Modifier) {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun UiPreview() {
+//@Preview(showBackground = true)
+//@Composable
+//fun UiPreview() {
 //    PlayerDetailsScreenUi(teamListData)
-    PopUpUi()
-}
+//    PopUpUi()
+//}
 
