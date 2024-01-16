@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,13 +70,14 @@ lateinit var list: HashMap<String, TeamData>
 private var mainViewModel = MainViewModel()
 var bowlingData: Bowling? = null
 var battingData: Batting? = null
+var countryName: String? = "India"
 
 class PlayersList : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
-        listModification("India", false, null, 0)
+        listModification(countryName.toString(), false, null, 0)
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
@@ -153,7 +155,7 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
                 if (listData.isNotEmpty()) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
-                            listModification("India", true, listData, index)
+                            listModification(countryName.toString(), true, listData, index)
                             mainViewModel.openDialog()
                             mainViewModel.SetPlayerName(mainViewModel.teamListData[index].nameFull)
                         }
@@ -177,22 +179,26 @@ fun FilterButtons() {
     var filter by remember { mutableStateOf(true) }
 
     if (filter) {
-        FilledButton("India") {
+        FilledButton(stringResource(R.string.india)) {
             filter = true
-            listModification("India", false, null, 0)
+            countryName = "India"
+            listModification(countryName.toString(), false, null, 0)
         }
-        OutlinedButton("New Zealand") {
+        OutlinedButton(stringResource(R.string.new_zealand)) {
             filter = false
-            listModification("New Zealand", false, null, 0)
+            countryName = "New Zealand"
+            listModification(countryName.toString(), false, null, 0)
         }
     } else {
-        OutlinedButton("India") {
+        OutlinedButton(stringResource(R.string.india)) {
             filter = true
-            listModification("India", false, null, 0)
+            countryName = "India"
+            listModification(countryName.toString(), false, null, 0)
         }
-        FilledButton("New Zealand") {
+        FilledButton(stringResource(R.string.new_zealand)) {
             filter = false
-            listModification("New Zealand", false, null, 0)
+            countryName = "New Zealand"
+            listModification(countryName.toString(), false, null, 0)
         }
     }
 }
