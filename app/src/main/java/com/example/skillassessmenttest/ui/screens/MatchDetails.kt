@@ -104,7 +104,7 @@ fun MatchDetailsScreenUi() {
                 "Match Details",
                 FontWeight.Bold,
             ) {
-                context.startActivity(Intent(context, PlayersDetails::class.java).apply {
+                context.startActivity(Intent(context, PlayersList::class.java).apply {
                     putExtra("list", teamData)
                 })
             }

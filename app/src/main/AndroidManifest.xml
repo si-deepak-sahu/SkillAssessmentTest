@@ -15,7 +15,7 @@
         android:theme="@style/Theme.SkillAssessmentTest"
         tools:targetApi="31">
         <activity
-            android:name=".ui.screens.PlayersDetails"
+            android:name=".ui.screens.PlayersList"
             android:exported="false" />
         <activity
             android:name=".ui.screens.MatchDetails"

@@ -71,7 +71,7 @@ private var mainViewModel = MainViewModel()
 var bowlingData: Bowling? = null
 var battingData: Batting? = null
 
-class PlayersDetails : ComponentActivity() {
+class PlayersList : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
