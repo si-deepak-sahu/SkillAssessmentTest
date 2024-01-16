@@ -30,16 +30,16 @@ class MainViewModel : ViewModel() {
     var isPopUpShown by mutableStateOf(false)
         private set
 
-    fun OpenDialog(){
+    fun openDialog(){
         isPopUpShown = true
     }
-    fun CloseDialog(){
+    fun closeDialog(){
         isPopUpShown = false
     }
 
     var playerName by mutableStateOf("")
         private set
-    fun SetPlayerName(name:String){
+    fun setPlayerName(name:String){
         playerName = name
     }
 

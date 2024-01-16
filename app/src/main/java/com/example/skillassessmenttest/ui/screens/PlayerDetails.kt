@@ -155,8 +155,8 @@ fun PlayerDetailsScreenUi(listData: ArrayList<PlayerInfoData>?) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
                             listModification("India", true, listData, index)
-                            mainViewModel.OpenDialog()
-                            mainViewModel.SetPlayerName(teamListData?.get(index)?.nameFull.toString())
+                            mainViewModel.openDialog()
+                            mainViewModel.setPlayerName(teamListData?.get(index)?.nameFull.toString())
                         }
                     }
                 }
@@ -324,7 +324,7 @@ fun PopUpUi() {
                             )
                             IconButton(
                                 onClick = {
-                                    mainViewModel.CloseDialog()
+                                    mainViewModel.closeDialog()
                                 },
                                 modifier = Modifier
                                     .padding(10.dp)
