@@ -51,15 +51,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.skillassessmenttest.R
+import com.example.skillassessmenttest.model.Batting
+import com.example.skillassessmenttest.model.Bowling
+import com.example.skillassessmenttest.model.PlayerInfoData
+import com.example.skillassessmenttest.model.TeamData
 import com.example.skillassessmenttest.ui.component.FilledButtonComposable
 import com.example.skillassessmenttest.ui.component.ImageComposable
 import com.example.skillassessmenttest.ui.component.NoRippleFilledButtonComposable
 import com.example.skillassessmenttest.ui.component.OutlinedButtonComposable
 import com.example.skillassessmenttest.ui.component.TextComposable
-import com.example.skillassessmenttest.model.Batting
-import com.example.skillassessmenttest.model.Bowling
-import com.example.skillassessmenttest.model.PlayerInfoData
-import com.example.skillassessmenttest.model.TeamData
 import com.example.skillassessmenttest.ui.theme.SkillAssessmentTestTheme
 import com.example.skillassessmenttest.viewModel.MainViewModel
 
@@ -70,7 +70,7 @@ lateinit var list: HashMap<String, TeamData>
 private var mainViewModel = MainViewModel()
 var bowlingData: Bowling? = null
 var battingData: Batting? = null
-var countryName: String? = "India"
+var countryName: String? = "All"
 var mergeList = ArrayList<PlayerInfoData>()
 
 class PlayersList : ComponentActivity() {
@@ -94,7 +94,7 @@ class PlayersList : ComponentActivity() {
     }
 }
 
-fun listModification(s: String, isPlayerData: Boolean, listData: List<PlayerInfoData>?, index: Int) {
+fun listModification(s: String, isPlayerData: Boolean, listData: PlayerInfoData?, index: Int) {
     if (list.isNotEmpty()) {
         for (i in list) {
             val key = i.key
@@ -103,24 +103,18 @@ fun listModification(s: String, isPlayerData: Boolean, listData: List<PlayerInfo
                 if (!isPlayerData) {
                     toolbarTitle = if (title == "India") {
                         "Indian Players"
-                    }else{
+                    } else {
                         "$title Players"
                     }
                     mainViewModel.setTeamListData(list[key]?.players?.values?.let { ArrayList(it) })
                     break
                 } else {
-                    val playerListData = list[key]?.players as HashMap<String, PlayerInfoData>
-                    for (j in playerListData) {
-                        val playerKey = j.key
-                        val playerName = playerListData[playerKey]?.nameFull.toString().trim()
-                        if (listData!![index].nameFull == playerName) {
-                            battingData = playerListData[playerKey]?.batting
-                            bowlingData = playerListData[playerKey]?.bowling
-                            break
-                        }
-                    }
+                    battingData = listData?.batting
+                    bowlingData = listData?.bowling
                 }
-            } else {
+            } else if (s == "All") {
+                battingData = listData?.batting
+                bowlingData = listData?.bowling
                 toolbarTitle = "All Players"
                 list[key]?.players?.values?.let { mergeList.addAll(it) }
                 mainViewModel.setTeamListData(mergeList)
@@ -137,6 +131,7 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
         onDispose {
             //Code inside will work as the last thing after leaving the screen
             countryName = "All"
+            mainViewModel.clearTeamListData()
         }
     })
 
@@ -159,15 +154,16 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
             )
         }
         Box {
-            LazyColumn(contentPadding = PaddingValues(bottom = 60.dp),
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 120.dp),
                 modifier = Modifier
-                .fillMaxSize()
+                    .fillMaxSize()
             )
             {
                 if (listData.isNotEmpty()) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
-                            listModification(countryName.toString(), true, listData, index)
+                            listModification(countryName.toString(), true, player, index)
                             mainViewModel.openDialog()
                             mainViewModel.SetPlayerName(mainViewModel.teamListData[index].nameFull)
                         }
@@ -188,40 +184,130 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
 
 @Composable
 fun FilterButtons() {
-    var filter by remember { mutableStateOf(true) }
+    var filter by remember { mutableStateOf("All") }
 
-    if (filter) {
-        FilledButton(stringResource(R.string.india)) {
-            filter = true
-            countryName = "India"
-            listModification(countryName.toString(), false, null, 0)
+    if (filter == "All") {
+        Column {
+            Row {
+                OutlinedButton(
+                    stringResource(R.string.india),
+                    Modifier
+                        .padding(2.dp)
+                        .width(130.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "India"
+                    countryName = "India"
+                    listModification(countryName.toString(), false, null, 0)
+                }
+                OutlinedButton(
+                    stringResource(R.string.new_zealand),
+                    Modifier
+                        .padding(2.dp)
+                        .width(130.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "New Zealand"
+                    countryName = "New Zealand"
+                    listModification(countryName.toString(), false, null, 0)
+                }
+            }
+            FilledButton(
+                stringResource(R.string.all),
+                Modifier
+                    .padding(2.dp)
+                    .width(260.dp)
+            ) {
+                mainViewModel.clearTeamListData()
+                filter = "All"
+                countryName = "All"
+                listModification(countryName.toString(), false, null, 0)
+            }
         }
-        OutlinedButton(stringResource(R.string.new_zealand)) {
-            filter = false
-            countryName = "New Zealand"
-            listModification(countryName.toString(), false, null, 0)
+    } else if (filter == "India") {
+        Column {
+            Row {
+                FilledButton(
+                    stringResource(R.string.india),
+                    Modifier
+                        .padding(2.dp)
+                        .width(130.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "India"
+                    countryName = "India"
+                    listModification(countryName.toString(), false, null, 0)
+                }
+                OutlinedButton(
+                    stringResource(R.string.new_zealand),
+                    Modifier
+                        .padding(2.dp)
+                        .width(130.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "New Zealand"
+                    countryName = "New Zealand"
+                    listModification(countryName.toString(), false, null, 0)
+                }
+            }
+            OutlinedButton(
+                stringResource(R.string.all),
+                Modifier
+                    .padding(2.dp)
+                    .width(260.dp)
+            ) {
+                mainViewModel.clearTeamListData()
+                filter = "All"
+                countryName = "All"
+                listModification(countryName.toString(), false, null, 0)
+            }
         }
-    } else {
-        OutlinedButton(stringResource(R.string.india)) {
-            filter = true
-            countryName = "India"
-            listModification(countryName.toString(), false, null, 0)
-        }
-        FilledButton(stringResource(R.string.new_zealand)) {
-            filter = false
-            countryName = "New Zealand"
-            listModification(countryName.toString(), false, null, 0)
+    } else if (filter == "New Zealand") {
+        Column {
+            Row {
+                OutlinedButton(
+                    stringResource(R.string.india),
+                    Modifier
+                        .padding(2.dp)
+                        .width(130.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "India"
+                    countryName = "India"
+                    listModification(countryName.toString(), false, null, 0)
+                }
+                FilledButton(
+                    stringResource(R.string.new_zealand),
+                    Modifier
+                        .padding(2.dp)
+                        .width(130.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "New Zealand"
+                    countryName = "New Zealand"
+                    listModification(countryName.toString(), false, null, 0)
+                }
+            }
+            OutlinedButton(
+                stringResource(R.string.all),
+                Modifier
+                    .padding(2.dp)
+                    .width(260.dp)
+            ) {
+                mainViewModel.clearTeamListData()
+                filter = "All"
+                countryName = "All"
+                listModification(countryName.toString(), false, null, 0)
+            }
         }
     }
 }
 
 @Composable
-private fun OutlinedButton(teamName: String, clickAction: () -> Unit) {
+private fun OutlinedButton(teamName: String, modifier: Modifier, clickAction: () -> Unit) {
     OutlinedButtonComposable(
         ButtonDefaults.buttonColors(colorResource(id = R.color.white)),
-        Modifier
-            .padding(2.dp)
-            .width(130.dp),
+        modifier = modifier,
         teamName,
         FontWeight.Bold,
     ) {
@@ -230,12 +316,10 @@ private fun OutlinedButton(teamName: String, clickAction: () -> Unit) {
 }
 
 @Composable
-private fun FilledButton(teamName: String, clickAction: () -> Unit) {
+private fun FilledButton(teamName: String, modifier: Modifier, clickAction: () -> Unit) {
     FilledButtonComposable(
         ButtonDefaults.buttonColors(colorResource(id = R.color.lavendar)),
-        Modifier
-            .padding(2.dp)
-            .width(130.dp),
+        modifier = modifier,
         teamName,
         FontWeight.Bold,
     ) {

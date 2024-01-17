@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SkillAssessmentTest</string>
+    <string name="all">All</string>
     <string name="india">India</string>
     <string name="new_zealand">New Zealand</string>
 </resources>

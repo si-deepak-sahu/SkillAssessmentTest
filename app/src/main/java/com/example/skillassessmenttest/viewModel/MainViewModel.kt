@@ -41,10 +41,14 @@ class MainViewModel : ViewModel() {
     fun SetPlayerName(name:String){
         playerName = name
     }
-    var teamListData by mutableStateOf(listOf<PlayerInfoData>())
+    var teamListData by mutableStateOf(mutableListOf<PlayerInfoData>())
 
     fun setTeamListData(data: ArrayList<PlayerInfoData>?){
         teamListData = data!!
+    }
+
+    fun clearTeamListData(){
+        teamListData.clear()
     }
 
     var errorMessage: String = ""
