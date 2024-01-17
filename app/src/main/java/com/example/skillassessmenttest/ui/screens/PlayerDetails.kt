@@ -71,13 +71,14 @@ private var mainViewModel = MainViewModel()
 var bowlingData: Bowling? = null
 var battingData: Batting? = null
 var countryName: String? = "India"
+var mergeList = ArrayList<PlayerInfoData>()
 
 class PlayersList : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
-        listModification(countryName.toString(), false, null, 0)
+        listModification("All", false, null, 0)
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
@@ -119,6 +120,10 @@ fun listModification(s: String, isPlayerData: Boolean, listData: List<PlayerInfo
                         }
                     }
                 }
+            } else {
+                toolbarTitle = "All Players"
+                list[key]?.players?.values?.let { mergeList.addAll(it) }
+                mainViewModel.setTeamListData(mergeList)
             }
         }
     }
@@ -131,7 +136,7 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
     DisposableEffect(key1 = Unit, effect = {
         onDispose {
             //Code inside will work as the last thing after leaving the screen
-            countryName = "India"
+            countryName = "All"
         }
     })
 
