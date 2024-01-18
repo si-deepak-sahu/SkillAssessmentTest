@@ -78,7 +78,7 @@ class PlayersList : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         list = intent.getSerializableExtra("list") as HashMap<String, TeamData>
-        listModification("All", false, null, 0)
+        listModification("All")
         setContent {
             SkillAssessmentTestTheme {
                 // A surface container using the 'background' color from the theme
@@ -94,27 +94,20 @@ class PlayersList : ComponentActivity() {
     }
 }
 
-fun listModification(s: String, isPlayerData: Boolean, listData: PlayerInfoData?, index: Int) {
+fun listModification(s: String) {
     if (list.isNotEmpty()) {
         for (i in list) {
             val key = i.key
             val title = list[key]?.nameFull.toString().trim()
             if (title.trim() == s) {
-                if (!isPlayerData) {
-                    toolbarTitle = if (title == "India") {
-                        "Indian Players"
-                    } else {
-                        "$title Players"
-                    }
-                    mainViewModel.setTeamListData(list[key]?.players?.values?.let { ArrayList(it) })
-                    break
+                toolbarTitle = if (title == "India") {
+                    "Indian Players"
                 } else {
-                    battingData = listData?.batting
-                    bowlingData = listData?.bowling
+                    "$title Players"
                 }
+                mainViewModel.setTeamListData(list[key]?.players?.values?.let { ArrayList(it) })
+                break
             } else if (s == "All") {
-                battingData = listData?.batting
-                bowlingData = listData?.bowling
                 toolbarTitle = "All Players"
                 list[key]?.players?.values?.let { mergeList.addAll(it) }
                 mainViewModel.setTeamListData(mergeList)
@@ -163,7 +156,8 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
                 if (listData.isNotEmpty()) {
                     itemsIndexed(listData) { index, player ->
                         CardItem(player) {
-                            listModification(countryName.toString(), true, player, index)
+                            battingData = player.batting
+                            bowlingData = player.bowling
                             mainViewModel.openDialog()
                             mainViewModel.SetPlayerName(mainViewModel.teamListData[index].nameFull)
                         }
@@ -186,118 +180,122 @@ fun PlayerDetailsScreenUi(listData: List<PlayerInfoData>) {
 fun FilterButtons() {
     var filter by remember { mutableStateOf("All") }
 
-    if (filter == "All") {
-        Column {
-            Row {
-                OutlinedButton(
-                    stringResource(R.string.india),
-                    Modifier
-                        .padding(2.dp)
-                        .width(130.dp)
-                ) {
-                    mainViewModel.clearTeamListData()
-                    filter = "India"
-                    countryName = "India"
-                    listModification(countryName.toString(), false, null, 0)
-                }
-                OutlinedButton(
-                    stringResource(R.string.new_zealand),
-                    Modifier
-                        .padding(2.dp)
-                        .width(130.dp)
-                ) {
-                    mainViewModel.clearTeamListData()
-                    filter = "New Zealand"
-                    countryName = "New Zealand"
-                    listModification(countryName.toString(), false, null, 0)
-                }
-            }
-            FilledButton(
-                stringResource(R.string.all),
-                Modifier
-                    .padding(2.dp)
-                    .width(260.dp)
-            ) {
-                mainViewModel.clearTeamListData()
-                filter = "All"
-                countryName = "All"
-                listModification(countryName.toString(), false, null, 0)
-            }
-        }
-    } else if (filter == "India") {
-        Column {
-            Row {
-                FilledButton(
-                    stringResource(R.string.india),
-                    Modifier
-                        .padding(2.dp)
-                        .width(130.dp)
-                ) {
-                    mainViewModel.clearTeamListData()
-                    filter = "India"
-                    countryName = "India"
-                    listModification(countryName.toString(), false, null, 0)
-                }
-                OutlinedButton(
-                    stringResource(R.string.new_zealand),
-                    Modifier
-                        .padding(2.dp)
-                        .width(130.dp)
-                ) {
-                    mainViewModel.clearTeamListData()
-                    filter = "New Zealand"
-                    countryName = "New Zealand"
-                    listModification(countryName.toString(), false, null, 0)
-                }
-            }
-            OutlinedButton(
-                stringResource(R.string.all),
-                Modifier
-                    .padding(2.dp)
-                    .width(260.dp)
-            ) {
-                mainViewModel.clearTeamListData()
-                filter = "All"
-                countryName = "All"
-                listModification(countryName.toString(), false, null, 0)
-            }
-        }
-    } else if (filter == "New Zealand") {
-        Column {
-            Row {
-                OutlinedButton(
-                    stringResource(R.string.india),
-                    Modifier
-                        .padding(2.dp)
-                        .width(130.dp)
-                ) {
-                    mainViewModel.clearTeamListData()
-                    filter = "India"
-                    countryName = "India"
-                    listModification(countryName.toString(), false, null, 0)
+    when (filter) {
+        "All" -> {
+            Column {
+                Row {
+                    OutlinedButton(
+                        stringResource(R.string.india),
+                        Modifier
+                            .padding(2.dp)
+                            .width(130.dp)
+                    ) {
+                        mainViewModel.clearTeamListData()
+                        filter = "India"
+                        countryName = "India"
+                        listModification(countryName.toString())
+                    }
+                    OutlinedButton(
+                        stringResource(R.string.new_zealand),
+                        Modifier
+                            .padding(2.dp)
+                            .width(130.dp)
+                    ) {
+                        mainViewModel.clearTeamListData()
+                        filter = "New Zealand"
+                        countryName = "New Zealand"
+                        listModification(countryName.toString())
+                    }
                 }
                 FilledButton(
-                    stringResource(R.string.new_zealand),
+                    stringResource(R.string.all),
                     Modifier
                         .padding(2.dp)
-                        .width(130.dp)
+                        .width(260.dp)
                 ) {
                     mainViewModel.clearTeamListData()
-                    filter = "New Zealand"
-                    countryName = "New Zealand"
-                    listModification(countryName.toString(), false, null, 0)
+                    filter = "All"
+                    countryName = "All"
+                    listModification(countryName.toString())
                 }
             }
-            OutlinedButton(
-                stringResource(R.string.all),
-                Modifier
-                    .padding(2.dp)
-                    .width(260.dp)
-            ) {
-                mainViewModel.clearTeamListData()
-                filter = "All"
-                countryName = "All"
-                listModification(countryName.toString(), false, null, 0)
+        }
+        "India" -> {
+            Column {
+                Row {
+                    FilledButton(
+                        stringResource(R.string.india),
+                        Modifier
+                            .padding(2.dp)
+                            .width(130.dp)
+                    ) {
+                        mainViewModel.clearTeamListData()
+                        filter = "India"
+                        countryName = "India"
+                        listModification(countryName.toString())
+                    }
+                    OutlinedButton(
+                        stringResource(R.string.new_zealand),
+                        Modifier
+                            .padding(2.dp)
+                            .width(130.dp)
+                    ) {
+                        mainViewModel.clearTeamListData()
+                        filter = "New Zealand"
+                        countryName = "New Zealand"
+                        listModification(countryName.toString())
+                    }
+                }
+                OutlinedButton(
+                    stringResource(R.string.all),
+                    Modifier
+                        .padding(2.dp)
+                        .width(260.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "All"
+                    countryName = "All"
+                    listModification(countryName.toString())
+                }
+            }
+        }
+        "New Zealand" -> {
+            Column {
+                Row {
+                    OutlinedButton(
+                        stringResource(R.string.india),
+                        Modifier
+                            .padding(2.dp)
+                            .width(130.dp)
+                    ) {
+                        mainViewModel.clearTeamListData()
+                        filter = "India"
+                        countryName = "India"
+                        listModification(countryName.toString())
+                    }
+                    FilledButton(
+                        stringResource(R.string.new_zealand),
+                        Modifier
+                            .padding(2.dp)
+                            .width(130.dp)
+                    ) {
+                        mainViewModel.clearTeamListData()
+                        filter = "New Zealand"
+                        countryName = "New Zealand"
+                        listModification(countryName.toString())
+                    }
+                }
+                OutlinedButton(
+                    stringResource(R.string.all),
+                    Modifier
+                        .padding(2.dp)
+                        .width(260.dp)
+                ) {
+                    mainViewModel.clearTeamListData()
+                    filter = "All"
+                    countryName = "All"
+                    listModification(countryName.toString())
+                }
             }
         }
     }
