@@ -12,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import com.example.skillassessmenttest.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -48,6 +50,7 @@ fun FilledButtonComposable(buttonColor: ButtonColors, modifier: Modifier, btnTex
         modifier = modifier,
     ) {
         Text(btnText,
+            color = colorResource(id = R.color.black),
             fontWeight = fontStyle )
     }
 }
@@ -79,6 +82,7 @@ fun OutlinedButtonComposable(buttonColor: ButtonColors, modifier: Modifier, btnT
         modifier = modifier
     ) {
         Text(btnText,
+            color = colorResource(id = R.color.black),
             fontWeight = fontStyle )
     }
 }
